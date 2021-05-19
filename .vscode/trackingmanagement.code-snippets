@@ -1,0 +1,19 @@
+{
+    "Create React Function Component": {
+        "prefix": "cod-rafc",
+        "body": [
+          "import React from 'react';",
+          "",
+          // "export const ${1:ReturnObject}: React.FC = () => {",
+          "export const ${TM_FILENAME_BASE}: React.FC = () => {",
+          "    return (",
+          "        <div>",
+          "            ${TM_FILENAME_BASE} !",
+          "        </div>",
+          "    )",
+          "}",
+          ""
+        ],
+        "description": "Create React Function Component"
+      }
+}
