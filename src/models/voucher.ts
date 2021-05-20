@@ -6,3 +6,9 @@ export interface IVoucher {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IPagedVoucher {
+  docs: IVoucher[];
+  totalDocs: number;
+  totalPages: number;
+}

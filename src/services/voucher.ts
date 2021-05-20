@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { IVoucher } from '../models/voucher';
+import { IPagedVoucher, IVoucher } from '../models/voucher';
 
 const url = `${process.env.REACT_APP_API_URL}/api/v1/voucher`;
 
 export async function getList(queryString?: string) {
   return await axios
-    .get<{ result: IVoucher[] }>(url + (queryString ? queryString : ''))
+    .get<{ result: IPagedVoucher }>(url + (queryString ? queryString : ''))
     .then((response) => {
       return response.data.result;
     });

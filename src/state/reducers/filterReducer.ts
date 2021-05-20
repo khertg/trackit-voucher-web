@@ -24,7 +24,6 @@ const loadingReducer = (state = initialState, action: AnyAction) => {
       state.showFilter = false;
       return state;
     case TOGGLE_FILTER:
-      console.log('Toggle Filter', state.showFilter);
       state.showFilter = !state.showFilter;
       return state;
     default:

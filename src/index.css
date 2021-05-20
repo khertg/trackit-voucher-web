@@ -12,7 +12,15 @@ code {
     monospace;
 }
 
-table, td, th {
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+table,
+td,
+th {
   border: 1px solid black;
 }
 
@@ -24,7 +32,13 @@ table {
   border-collapse: collapse;
 }
 
-table.no-border, table.no-border td,  table.no-border th {
+table tbody tr td:nth-child(2) {
+  text-align: center;
+}
+
+table.no-border,
+table.no-border td,
+table.no-border th {
   border: unset;
 }
 
@@ -37,7 +51,7 @@ table.no-border, table.no-border td,  table.no-border th {
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,4 +63,36 @@ table.no-border, table.no-border td,  table.no-border th {
   background-color: white;
   padding: 10px;
   text-align: center;
+}
+
+.pagination {
+  display: flex;
+}
+
+.pagination li {
+  user-select: none;
+  cursor: pointer;
+  display: block;
+  padding: 2px 5px;
+  border: 1px solid black;
+  border-right: none;
+  border-collapse: collapse;
+}
+
+.pagination li:last-child {
+  border-right: 1px solid black;
+}
+
+.pagination li.active {
+  background-color: rgb(179, 177, 177);
+}
+
+.paging-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.no-border td {
+  border-top: unset;
 }

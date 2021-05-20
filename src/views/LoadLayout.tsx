@@ -1,23 +1,11 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
-import {
-  hideFilter,
-  toggleFilter,
-  showFilter,
-} from '../state/actions/filterAction';
-import { FilterState } from '../state/reducers/filterReducer';
+import { toggleFilter } from '../state/actions/filterAction';
 import { NotFound } from './NotFound';
 import { UnderContruction } from './UnderContruction';
-import { Voucher } from './voucher/Voucher';
-import { VoucherCreate } from './voucher/VoucherCreate';
-import { VoucherEdit } from './voucher/VoucherEdit';
 
 export const LoadLayout: React.FC = () => {
-  //Global State
-  const showFilterState = useSelector<FilterState>(
-    (state) => state.filter.showFilter
-  );
   const dispatch = useDispatch();
 
   let { path } = useRouteMatch();

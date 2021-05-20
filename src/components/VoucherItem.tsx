@@ -8,6 +8,7 @@ interface IProps {
   handleDelete: (id: string) => void;
   id: string;
   code: string;
+  number: number;
   is_sold: boolean;
   sold_to?: string;
   createdAt: string;
@@ -19,6 +20,7 @@ export const VoucherItem: React.FC<IProps> = ({
   handleDelete,
   id,
   code,
+  number,
   is_sold,
   sold_to,
   createdAt,
@@ -47,14 +49,15 @@ export const VoucherItem: React.FC<IProps> = ({
           checked={isChecked}
         />
       </td>
+      <td>{number}</td>
       <td>{code}</td>
       <td>
         <input type="checkbox" defaultChecked={is_sold} />
       </td>
       <td>{sold_to ? sold_to : '-'}</td>
 
-      <td>{Moment(createdAt).format('MMM-DD-YYYY')}</td>
-      <td>{Moment(updatedAt).format('MMM-DD-YYYY')}</td>
+      <td>{Moment(createdAt).format('MMM-DD-YYYY hh:mm A')}</td>
+      <td>{Moment(updatedAt).format('MMM-DD-YYYY hh:mm A')}</td>
       <td>
         <button
           onClick={(e) => {
