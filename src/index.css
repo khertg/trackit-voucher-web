@@ -96,3 +96,7 @@ table.no-border th {
 .no-border td {
   border-top: unset;
 }
+
+.voucher-container {
+  display: flex;
+}

@@ -123,7 +123,7 @@ export const Voucher: React.FC = () => {
   };
 
   const getItemNumber = (index: number) => {
-    if (currentPage == 0) {
+    if (currentPage === 0) {
       return index + 1;
     } else {
       return itemPerPage * currentPage + 1 + index;

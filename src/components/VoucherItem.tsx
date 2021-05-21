@@ -27,6 +27,7 @@ export const VoucherItem: React.FC<IProps> = ({
   updatedAt,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
+  const [showVoucherCode, setShowVoucherCode] = useState(false);
   useEffect(() => {
     if (isSelected) {
       setIsChecked(true);
@@ -50,9 +51,21 @@ export const VoucherItem: React.FC<IProps> = ({
         />
       </td>
       <td>{number}</td>
-      <td>{code}</td>
       <td>
-        <input type="checkbox" defaultChecked={is_sold} />
+        <div className="voucher-container">
+          <button onClick={() => setShowVoucherCode(!showVoucherCode)}>
+            {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+          </button>
+          &nbsp;
+          <input
+            size={10}
+            type={showVoucherCode ? 'text' : 'password'}
+            value={code}
+          />
+        </div>
+      </td>
+      <td>
+        {is_sold ? <span>✔️</span> : <span>❌</span>}
       </td>
       <td>{sold_to ? sold_to : '-'}</td>
 
