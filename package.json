@@ -30,6 +30,8 @@
     "start": "env-cmd -f ./config/dev.env react-scripts start",
     "dev": "env-cmd -f ./config/dev.env react-scripts start",
     "build": "env-cmd -f ./config/prod.env react-scripts build",
+    "deploy": "env-cmd -f ./config/deploy.env node src/deploy.js",
+    "build:deploy": "env-cmd -f ./config/prod.env react-scripts build && env-cmd -f ./config/deploy.env node src/deploy.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -50,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "ftp-deploy": "^2.4.1"
   }
 }
