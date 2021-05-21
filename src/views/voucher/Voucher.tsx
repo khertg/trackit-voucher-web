@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { VoucherFilter } from '../../components/VoucherFilter';
 import { VoucherItem } from '../../components/VoucherItem';
+import { ISelectedPage } from '../../helpers/common';
 import {
-  ISelectedPage,
+  IPagedVoucher,
   ISelectedVoucher,
+  IVoucher,
   IVoucherFilter,
-} from '../../helpers/common';
-import { IPagedVoucher, IVoucher } from '../../models/voucher';
+} from '../../models/voucher';
 import { deleteById, getList } from '../../services/voucher';
 import queryString from 'query-string';
 import { useSelector, useDispatch } from 'react-redux';
@@ -198,7 +199,7 @@ export const Voucher: React.FC = () => {
             </td>
             <td>#</td>
             <td>Voucher Code</td>
-            <td>Is Sold ?</td>
+            <td>Sold</td>
             <td>Sold To</td>
             <td>Created At</td>
             <td>Updated At</td>

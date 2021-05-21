@@ -2,8 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { toggleFilter } from '../state/actions/filterAction';
+import { Load } from './load/Load';
+import { LoadCreate } from './load/LoadCreate';
+import { LoadEdit } from './load/LoadEdit';
 import { NotFound } from './NotFound';
-import { UnderContruction } from './UnderContruction';
 
 export const LoadLayout: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,13 @@ export const LoadLayout: React.FC = () => {
       <hr />
       <Switch>
         <Route exact path={path}>
-          <UnderContruction />
+          <Load />
+        </Route>
+        <Route path={`${path}/create`}>
+          <LoadCreate />
+        </Route>
+        <Route path={`${path}/edit/:id`}>
+          <LoadEdit />
         </Route>
         <Route path="*" component={NotFound}></Route>
       </Switch>

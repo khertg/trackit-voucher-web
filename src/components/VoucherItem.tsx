@@ -60,7 +60,7 @@ export const VoucherItem: React.FC<IProps> = ({
           <input
             size={10}
             type={showVoucherCode ? 'text' : 'password'}
-            value={code}
+            defaultValue={code}
           />
         </div>
       </td>

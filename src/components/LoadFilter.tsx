@@ -1,16 +1,13 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { IVoucherFilter } from '../models/voucher';
+import { ILoadFilter } from '../models/load';
 
 interface IProps {
-  preloadedValues?: IVoucherFilter;
+  preloadedValues?: ILoadFilter;
   onSubmit: (e: any) => void;
 }
 
-export const VoucherFilter: React.FC<IProps> = ({
-  preloadedValues,
-  onSubmit,
-}) => {
+export const LoadFilter: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
   const {
     register,
     handleSubmit,
@@ -25,40 +22,40 @@ export const VoucherFilter: React.FC<IProps> = ({
       <table className="no-border">
         <tbody>
           <tr>
-            <td>Code</td>
+            <td>Buyer</td>
             <td>
-              <input type="text" {...register('code')} />
+              <input type="text" {...register('buyer')} />
               &nbsp;
               <small className="text-danger">
-                {errors.code && errors.code.message}
+                {errors.buyer && errors.buyer.message}
               </small>
             </td>
           </tr>
           <tr>
-            <td>Sold To</td>
+            <td>Number</td>
             <td>
-              <input type="text" {...register('sold_to')} />
+              <input type="text" {...register('number')} />
             </td>
           </tr>
           <tr>
             <td></td>
             <td>
-              <input {...register('is_sold')} type="radio" value="" id="all" />
+              <input {...register('is_paid')} type="radio" value="" id="all" />
               <label htmlFor="all">All</label>&nbsp;
               <input
-                {...register('is_sold')}
+                {...register('is_paid')}
                 type="radio"
                 value="true"
                 id="sold"
               />
-              <label htmlFor="sold">Sold</label>&nbsp;
+              <label htmlFor="sold">Paid</label>&nbsp;
               <input
-                {...register('is_sold')}
+                {...register('is_paid')}
                 type="radio"
                 value="false"
                 id="not_sold"
               />
-              <label htmlFor="not_sold">Not Sold</label>
+              <label htmlFor="not_sold">Not Paid</label>
             </td>
           </tr>
           <tr>
