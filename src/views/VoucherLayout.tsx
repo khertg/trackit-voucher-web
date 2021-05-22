@@ -5,6 +5,7 @@ import { toggleFilter } from '../state/actions/filterAction';
 import { NotFound } from './NotFound';
 import { Voucher } from './voucher/Voucher';
 import { VoucherCreate } from './voucher/VoucherCreate';
+import { VoucherCSVUpload } from './voucher/VoucherCSVUpload';
 import { VoucherEdit } from './voucher/VoucherEdit';
 
 export const VoucherLayout: React.FC = () => {
@@ -23,6 +24,10 @@ export const VoucherLayout: React.FC = () => {
         <button>Create</button>
       </NavLink>
       &nbsp;
+      <NavLink to="/voucher/csv-upload">
+        <button>Import CSV</button>
+      </NavLink>
+      &nbsp;
       <button
         onClick={() => {
           dispatch(toggleFilter());
@@ -37,6 +42,9 @@ export const VoucherLayout: React.FC = () => {
         </Route>
         <Route path={`${path}/create`}>
           <VoucherCreate />
+        </Route>
+        <Route path={`${path}/csv-upload`}>
+          <VoucherCSVUpload />
         </Route>
         <Route path={`${path}/edit/:id`}>
           <VoucherEdit />

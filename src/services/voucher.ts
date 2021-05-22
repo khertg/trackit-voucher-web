@@ -59,3 +59,15 @@ export async function deleteById(id: string) {
       return response.data.result;
     });
 }
+
+export async function importCSV(data: FormData) {
+  return await axios
+    .post<{ result: IVoucher }>(`${url}/import-csv`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => {
+      return response.data.result;
+    });
+}

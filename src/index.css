@@ -46,6 +46,10 @@ table.no-border th {
   color: red;
 }
 
+.text-success {
+  color: green;
+}
+
 .loading {
   position: absolute;
   top: 0;
