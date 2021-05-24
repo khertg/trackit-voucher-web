@@ -12,14 +12,14 @@ export async function getList(queryString?: string) {
 }
 
 export async function create(
-  code: string,
-  sold_to?: string,
-  is_sold?: boolean
+  voucher_code: string,
+  buyer?: string,
+  sold?: boolean
 ) {
   const data = {
-    code,
-    sold_to,
-    is_sold,
+    voucher_code,
+    buyer,
+    sold,
   };
   return await axios.post<{ result: IVoucher }>(url, data).then((response) => {
     return response.data.result;
@@ -28,14 +28,14 @@ export async function create(
 
 export async function edit(
   id: string,
-  code: string,
-  sold_to?: string,
-  is_sold?: boolean
+  voucher_code: string,
+  buyer?: string,
+  sold?: boolean
 ) {
   const data = {
-    code,
-    sold_to,
-    is_sold,
+    voucher_code,
+    buyer,
+    sold,
   };
   return await axios
     .patch<{ result: IVoucher }>(`${url}/${id}`, data)
@@ -55,6 +55,14 @@ export async function get(id: string) {
 export async function deleteById(id: string) {
   return await axios
     .delete<{ result: IVoucher }>(`${url}/${id}`)
+    .then((response) => {
+      return response.data.result;
+    });
+}
+
+export async function deleteAll(data: string[]) {
+  return await axios
+    .post<{ result: IVoucher }>(`${url}/deleteAll`, { ids: data })
     .then((response) => {
       return response.data.result;
     });

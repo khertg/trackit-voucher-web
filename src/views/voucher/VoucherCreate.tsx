@@ -9,9 +9,9 @@ export const VoucherCreate: React.FC = () => {
   const dispatch = useDispatch();
 
   const onCreate = async (data: any) => {
-    const { code, sold_to, is_sold } = data;
+    const { voucher_code, buyer, sold } = data;
     dispatch(showLoading());
-    create(code, sold_to, is_sold)
+    create( voucher_code, buyer, sold)
       .then((data) => {
         history.push('/voucher');
       })

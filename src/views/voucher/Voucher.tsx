@@ -2,23 +2,26 @@ import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { VoucherFilter } from '../../components/VoucherFilter';
 import { VoucherItem } from '../../components/VoucherItem';
 import { ISelectedPage } from '../../helpers/common';
-import {
-  IPagedVoucher,
-  ISelectedVoucher,
-  IVoucher,
-  IVoucherFilter,
-} from '../../models/voucher';
+import { IPagedVoucher, IVoucher, IVoucherFilter } from '../../models/voucher';
 import { deleteById, getList } from '../../services/voucher';
 import queryString from 'query-string';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../../state/actions/loadingAction';
 import { FilterState } from '../../state/reducers/filterReducer';
 import ReactPaginate from 'react-paginate';
+import { VoucherState } from '../../state/reducers/voucherReducer';
+import { setSelectedVoucher } from '../../state/actions/voucherAction';
 
 export const Voucher: React.FC = () => {
   //Global State
-  const showFilter = useSelector<FilterState>(
-    (state) => state.filter.showFilter
+  const selectVoucher = useSelector(
+    (state: VoucherState) => state.voucher.selected
+  );
+  const reloadList = useSelector(
+    (state: VoucherState) => state.voucher.reloadList
+  );
+  const showFilter = useSelector(
+    (state: FilterState) => state.filter.showFilter
   );
   const dispatch = useDispatch();
 
@@ -28,15 +31,13 @@ export const Voucher: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemPerPage, setItemPerPage] = useState<number>(5);
   const [voucherFilter, setVoucherFilter] = useState<IVoucherFilter>({
-    is_sold: '',
-    sortBy: 'createdAt:desc',
+    sold: '',
+    sort_by: 'id:desc',
     limit: 5,
     page: 1,
   });
   const [selectAll, setSelectAll] = useState<boolean>(false);
-  const [selectedVoucher, setSelectedVoucher] = useState<ISelectedVoucher[]>(
-    []
-  );
+  const [showAllVoucherCode, setShowAllVoucherCode] = useState<boolean>(false);
   const firstRun = useRef(true);
 
   useEffect(() => {
@@ -48,23 +49,23 @@ export const Voucher: React.FC = () => {
     dispatch(showLoading());
     fetchPagedVoucher();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [voucherFilter]);
+  }, [voucherFilter, reloadList]);
 
   const isVoucherExist = (voucherId: string) =>
-    selectedVoucher.some(({ id }) => id === voucherId);
+    selectVoucher.some(({ id }) => id === voucherId);
 
   const handleVoucherSelection = (
     id: string,
-    code: string,
+    voucher_code: string,
     isSelected: boolean
   ) => {
     if (isSelected) {
       if (!isVoucherExist(id)) {
-        setSelectedVoucher([...selectedVoucher, { id, code }]);
+        dispatch(setSelectedVoucher([...selectVoucher, { id, voucher_code }]));
       }
     } else {
-      setSelectedVoucher(
-        selectedVoucher.filter((voucher) => voucher.id !== id)
+      dispatch(
+        setSelectedVoucher(selectVoucher.filter((voucher) => voucher.id !== id))
       );
     }
   };
@@ -73,11 +74,11 @@ export const Voucher: React.FC = () => {
     setSelectAll(isChecked);
     if (isChecked) {
       let vouchers = voucherList.map((voucher) => {
-        return { id: voucher._id, code: voucher.code };
+        return { id: voucher.id, voucher_code: voucher.voucher_code };
       });
-      setSelectedVoucher(vouchers);
+      dispatch(setSelectedVoucher(vouchers));
     } else {
-      setSelectedVoucher([]);
+      dispatch(setSelectedVoucher([]));
     }
   };
 
@@ -102,6 +103,8 @@ export const Voucher: React.FC = () => {
   };
 
   const handlePageClick = (data: ISelectedPage) => {
+    setSelectAll(false);
+    dispatch(setSelectedVoucher([]));
     setCurrentPage(data.selected);
     setVoucherFilter({
       ...voucherFilter,
@@ -113,7 +116,7 @@ export const Voucher: React.FC = () => {
     const query = queryString.stringify(voucherFilter);
     getList(`?${query}`)
       .then((data: IPagedVoucher) => {
-        setVoucherList(data.docs);
+        setVoucherList(data.data);
         setTotalPages(data.totalPages);
         dispatch(hideLoading());
       })
@@ -168,6 +171,8 @@ export const Voucher: React.FC = () => {
                     name="voucher-per-page"
                     id="voucher-per-page"
                     onChange={(e) => {
+                      setSelectAll(false);
+                      dispatch(setSelectedVoucher([]));
                       setItemPerPage(parseInt(e.target.value));
                       setCurrentPage(0);
                       setVoucherFilter({
@@ -195,10 +200,18 @@ export const Voucher: React.FC = () => {
                 onChange={(e) => {
                   handleSelectAll(e.target.checked);
                 }}
+                checked={selectAll}
               />
             </td>
             <td>#</td>
-            <td>Voucher Code</td>
+            <td>
+              <button
+                onClick={() => setShowAllVoucherCode(!showAllVoucherCode)}
+              >
+                {showAllVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+              </button>
+              &nbsp;Voucher Code
+            </td>
             <td>Sold</td>
             <td>Sold To</td>
             <td>Created At</td>
@@ -212,14 +225,15 @@ export const Voucher: React.FC = () => {
               handleSelect={handleVoucherSelection}
               handleDelete={handleDelete}
               isSelected={selectAll}
-              key={voucher._id}
-              id={voucher._id}
+              isShow={showAllVoucherCode}
+              key={voucher.id}
+              id={voucher.id}
               number={getItemNumber(index)}
-              code={voucher.code}
-              is_sold={voucher.is_sold}
-              sold_to={voucher.sold_to}
-              createdAt={voucher.createdAt}
-              updatedAt={voucher.updatedAt}
+              voucher_code={voucher.voucher_code}
+              sold={voucher.sold}
+              buyer={voucher.buyer}
+              created_at={voucher.created_at}
+              updated_at={voucher.updated_at}
             />
           ))}
 

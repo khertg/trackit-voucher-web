@@ -32,25 +32,25 @@ export const LoadFilter: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
             </td>
           </tr>
           <tr>
-            <td>Number</td>
+            <td>Phone Number</td>
             <td>
-              <input type="text" {...register('number')} />
+              <input type="text" {...register('phone_number')} />
             </td>
           </tr>
           <tr>
             <td></td>
             <td>
-              <input {...register('is_paid')} type="radio" value="" id="all" />
+              <input {...register('paid')} type="radio" value="" id="all" />
               <label htmlFor="all">All</label>&nbsp;
               <input
-                {...register('is_paid')}
+                {...register('paid')}
                 type="radio"
                 value="true"
                 id="sold"
               />
               <label htmlFor="sold">Paid</label>&nbsp;
               <input
-                {...register('is_paid')}
+                {...register('paid')}
                 type="radio"
                 value="false"
                 id="not_sold"
@@ -61,9 +61,9 @@ export const LoadFilter: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
           <tr>
             <td></td>
             <td>
-              <select {...register('sortBy', { required: true })}>
-                <option value="createdAt:desc">Desc</option>
-                <option value="createdAt:asc">Asc</option>
+              <select {...register('sort_by', { required: true })}>
+                <option value="created_at:desc">Desc</option>
+                <option value="created_at:asc">Asc</option>
               </select>
             </td>
           </tr>

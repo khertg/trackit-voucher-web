@@ -5,8 +5,8 @@ interface IProps {
   preloadedValues?: {
     buyer: string;
     amount: number;
-    number: string;
-    is_paid?: boolean;
+    phone_number: string;
+    paid?: boolean;
   };
   onSubmit: (e: any) => void;
 }
@@ -41,16 +41,16 @@ export const LoadForm: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
               </tr>
               <tr>
                 <td>
-                  <span className="text-danger">*</span>Number:
+                  <span className="text-danger">*</span>Phone Number:
                 </td>
                 <td>
                   <input
                     type="text"
-                    {...register('number', { required: 'Number is required!' })}
+                    {...register('phone_number', { required: 'Phone Number is required!' })}
                   />
                   &nbsp;
                   <small className="text-danger">
-                    {errors.number && errors.number.message}
+                    {errors.phone_number && errors.phone_number.message}
                   </small>
                 </td>
               </tr>
@@ -72,7 +72,7 @@ export const LoadForm: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
               <tr>
                 <td>Paid:</td>
                 <td>
-                  <input type="checkbox" {...register('is_paid')} />
+                  <input type="checkbox" {...register('paid')} />
                 </td>
               </tr>
               <tr>

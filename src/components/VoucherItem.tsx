@@ -4,27 +4,29 @@ import history from '../history';
 
 interface IProps {
   isSelected: boolean;
+  isShow: boolean;
   handleSelect: (id: string, code: string, isSelected: boolean) => void;
   handleDelete: (id: string) => void;
   id: string;
-  code: string;
+  voucher_code: string;
   number: number;
-  is_sold: boolean;
-  sold_to?: string;
-  createdAt: string;
-  updatedAt: string;
+  sold: boolean;
+  buyer?: string;
+  created_at: string;
+  updated_at: string;
 }
 export const VoucherItem: React.FC<IProps> = ({
   isSelected,
+  isShow,
   handleSelect,
   handleDelete,
   id,
-  code,
+  voucher_code,
   number,
-  is_sold,
-  sold_to,
-  createdAt,
-  updatedAt,
+  sold,
+  buyer,
+  created_at,
+  updated_at,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [showVoucherCode, setShowVoucherCode] = useState(false);
@@ -36,6 +38,15 @@ export const VoucherItem: React.FC<IProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSelected]);
+
+  useEffect(() => {
+    if (isShow) {
+      setShowVoucherCode(true);
+    } else {
+      setShowVoucherCode(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isShow]);
   return (
     <tr>
       <td>
@@ -44,7 +55,7 @@ export const VoucherItem: React.FC<IProps> = ({
           className="select-item"
           onChange={(e) => {
             setIsChecked(!isChecked);
-            handleSelect(id, code, e.target.checked);
+            handleSelect(id, voucher_code, e.target.checked);
           }}
           value={id}
           checked={isChecked}
@@ -60,17 +71,15 @@ export const VoucherItem: React.FC<IProps> = ({
           <input
             size={10}
             type={showVoucherCode ? 'text' : 'password'}
-            defaultValue={code}
+            defaultValue={voucher_code}
           />
         </div>
       </td>
-      <td>
-        {is_sold ? <span>✔️</span> : <span>❌</span>}
-      </td>
-      <td>{sold_to ? sold_to : '-'}</td>
+      <td>{sold ? <span>✔️</span> : <span>❌</span>}</td>
+      <td>{buyer ? buyer : '-'}</td>
 
-      <td>{Moment(createdAt).format('MMM-DD-YYYY hh:mm A')}</td>
-      <td>{Moment(updatedAt).format('MMM-DD-YYYY hh:mm A')}</td>
+      <td>{Moment(created_at).format('MMM-DD-YYYY hh:mm A')}</td>
+      <td>{Moment(updated_at).format('MMM-DD-YYYY hh:mm A')}</td>
       <td>
         <button
           onClick={(e) => {

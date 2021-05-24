@@ -1,30 +1,30 @@
 export interface ILoad {
-    _id: string;
+    id: string;
     buyer: string;
     amount: number;
-    number: string;
-    is_paid: boolean;
-    createdAt: string;
-    updatedAt: string;
+    phone_number: string;
+    paid: boolean;
+    created_at: string;
+    updated_at: string;
   }
   
   export interface IPagedLoad {
-    docs: ILoad[];
-    totalDocs: number;
+    data: ILoad[];
+    totalItems: number;
     totalPages: number;
   }
 
   export interface ILoadFilter {
     buyer?: string;
-    number?: string;
-    is_paid?: string;
-    sortBy?: string;
+    phone_number?: string;
+    paid?: string;
+    sort_by?: string;
     page?: number;
     limit?: number;
   }
   
   export interface ISelectedLoad {
     id: string;
-    number: string;
+    phone_number: string;
   }
   

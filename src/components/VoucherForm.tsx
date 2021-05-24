@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 
 interface IProps {
   preloadedValues?: {
-    code: string;
-    sold_to?: string;
-    is_sold?: boolean;
+    voucher_code: string;
+    buyer?: string;
+    sold?: boolean;
   };
   onSubmit: (e: any) => void;
 }
@@ -28,29 +28,31 @@ export const VoucherForm: React.FC<IProps> = ({
         <tbody>
           <tr>
             <td>
-              <span className="text-danger">*</span>Code:
+              <span className="text-danger">*</span>Voucher Code:
             </td>
             <td>
               <input
                 type="text"
-                {...register('code', { required: 'Code is required!' })}
+                {...register('voucher_code', {
+                  required: 'Voucher Code is required!',
+                })}
               />
               &nbsp;
               <small className="text-danger">
-                {errors.code && errors.code.message}
+                {errors.voucher_code && errors.voucher_code.message}
               </small>
             </td>
           </tr>
           <tr>
-            <td>Sold To:</td>
+            <td>Buyer:</td>
             <td>
-              <input type="text" {...register('sold_to')} />
+              <input type="text" {...register('buyer')} />
             </td>
           </tr>
           <tr>
             <td>Is Sold:</td>
             <td>
-              <input type="checkbox" {...register('is_sold')} />
+              <input type="checkbox" {...register('sold')} />
             </td>
           </tr>
           <tr>

@@ -13,15 +13,15 @@ export async function getList(queryString?: string) {
 
 export async function create(
   buyer: string,
-  number: string,
+  phone_number: string,
   amount: number,
-  is_paid?: boolean
+  paid?: boolean
 ) {
   const data = {
     buyer,
-    number,
+    phone_number,
     amount,
-    is_paid,
+    paid,
   };
   return await axios.post<{ result: ILoad }>(url, data).then((response) => {
     return response.data.result;
@@ -31,15 +31,15 @@ export async function create(
 export async function edit(
   id: string,
   buyer: string,
-  number: string,
+  phone_number: string,
   amount: number,
-  is_paid?: boolean
+  paid?: boolean
 ) {
   const data = {
     buyer,
-    number,
+    phone_number,
     amount,
-    is_paid,
+    paid,
   };
   return await axios
     .patch<{ result: ILoad }>(`${url}/${id}`, data)

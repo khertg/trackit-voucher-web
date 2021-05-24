@@ -20,7 +20,7 @@ export const VoucherEdit: React.FC = () => {
 
   //Local State
   const [voucher, setVoucher] =
-    useState<{ code: string; sold_to?: string; is_sold?: boolean }>();
+    useState<{ voucher_code: string; buyer?: string; sold?: boolean }>();
   const { id } = useParams<ParamTypes>();
 
   useEffect(() => {
@@ -30,9 +30,9 @@ export const VoucherEdit: React.FC = () => {
         .then((voucherData: IVoucher) => {
           dispatch(hideLoading());
           setVoucher({
-            code: voucherData.code,
-            sold_to: voucherData.sold_to,
-            is_sold: voucherData.is_sold,
+            voucher_code: voucherData.voucher_code,
+            buyer: voucherData.buyer,
+            sold: voucherData.sold,
           });
         })
         .catch((err) => {
@@ -45,9 +45,9 @@ export const VoucherEdit: React.FC = () => {
   }, []);
 
   const onEdit = async (data: any) => {
-    const { code, sold_to, is_sold } = data;
+    const { voucher_code, buyer, sold } = data;
     dispatch(showLoading());
-    edit(id, code, sold_to, is_sold)
+    edit(id, voucher_code, buyer, sold)
       .then((data) => {
         history.push('/voucher');
       })

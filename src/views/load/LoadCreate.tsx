@@ -9,9 +9,9 @@ export const LoadCreate: React.FC = () => {
   const dispatch = useDispatch();
 
   const onCreate = async (data: any) => {
-    const { buyer, number, amount, is_paid } = data;
+    const { buyer, phone_number, amount, paid } = data;
     dispatch(showLoading());
-    create(buyer, number, amount, is_paid)
+    create(buyer, phone_number, amount, paid)
       .then((data) => {
         history.push('/load');
       })

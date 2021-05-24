@@ -25,35 +25,35 @@ export const VoucherFilter: React.FC<IProps> = ({
       <table className="no-border">
         <tbody>
           <tr>
-            <td>Code</td>
+            <td>Voucher Code</td>
             <td>
-              <input type="text" {...register('code')} />
+              <input type="text" {...register('voucher_code')} />
               &nbsp;
               <small className="text-danger">
-                {errors.code && errors.code.message}
+                {errors.voucher_code && errors.voucher_code.message}
               </small>
             </td>
           </tr>
           <tr>
-            <td>Sold To</td>
+            <td>Buyer</td>
             <td>
-              <input type="text" {...register('sold_to')} />
+              <input type="text" {...register('buyer')} />
             </td>
           </tr>
           <tr>
             <td></td>
             <td>
-              <input {...register('is_sold')} type="radio" value="" id="all" />
+              <input {...register('sold')} type="radio" value="" id="all" />
               <label htmlFor="all">All</label>&nbsp;
               <input
-                {...register('is_sold')}
+                {...register('sold')}
                 type="radio"
                 value="true"
                 id="sold"
               />
               <label htmlFor="sold">Sold</label>&nbsp;
               <input
-                {...register('is_sold')}
+                {...register('sold')}
                 type="radio"
                 value="false"
                 id="not_sold"
@@ -64,9 +64,9 @@ export const VoucherFilter: React.FC<IProps> = ({
           <tr>
             <td></td>
             <td>
-              <select {...register('sortBy', { required: true })}>
-                <option value="createdAt:desc">Desc</option>
-                <option value="createdAt:asc">Asc</option>
+              <select {...register('sort_by', { required: true })}>
+                <option value="id:desc">Desc</option>
+                <option value="id:asc">Asc</option>
               </select>
             </td>
           </tr>

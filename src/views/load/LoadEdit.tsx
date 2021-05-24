@@ -22,9 +22,9 @@ export const LoadEdit: React.FC = () => {
   const [load, setLoad] =
     useState<{
       buyer: string;
-      number: string;
+      phone_number: string;
       amount: number;
-      is_paid?: boolean;
+      paid: boolean;
     }>();
   const { id } = useParams<ParamTypes>();
 
@@ -36,9 +36,9 @@ export const LoadEdit: React.FC = () => {
           dispatch(hideLoading());
           setLoad({
             buyer: loadData.buyer,
-            number: loadData.number,
+            phone_number: loadData.phone_number,
             amount: loadData.amount,
-            is_paid: loadData.is_paid,
+            paid: loadData.paid,
           });
         })
         .catch((err) => {
@@ -51,9 +51,9 @@ export const LoadEdit: React.FC = () => {
   }, []);
 
   const onEdit = async (data: any) => {
-    const { buyer, number, amount, is_paid } = data;
+    const { buyer, phone_number, amount, paid } = data;
     dispatch(showLoading());
-    edit(id, buyer, number, amount, is_paid)
+    edit(id, buyer, phone_number, amount, paid)
       .then((data) => {
         history.push('/load');
       })

@@ -28,8 +28,8 @@ export const Load: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemPerPage, setItemPerPage] = useState<number>(5);
   const [loadFilter, setLoadFilter] = useState<ILoadFilter>({
-    is_paid: '',
-    sortBy: 'createdAt:desc',
+    paid: '',
+    sort_by: 'created_at:desc',
     limit: 5,
     page: 1,
   });
@@ -69,11 +69,11 @@ export const Load: React.FC = () => {
     if (isChecked) {
       let loads = loadList.map((load) => {
         return {
-          id: load._id,
+          id: load.id,
           buyer: load.buyer,
           amount: load.amount,
-          number: load.number,
-          is_paid: load.is_paid,
+          phone_number: load.phone_number,
+          paid: load.paid,
         };
       });
       setSelectedLoad(loads);
@@ -87,12 +87,12 @@ export const Load: React.FC = () => {
 
   const handleLoadSelection = (
     id: string,
-    number: string,
+    phone_number: string,
     isSelected: boolean
   ) => {
     if (isSelected) {
       if (!isLoadExist(id)) {
-        setSelectedLoad([...selectedLoad, { id, number }]);
+        setSelectedLoad([...selectedLoad, { id, phone_number }]);
       }
     } else {
       setSelectedLoad(selectedLoad.filter((voucher) => voucher.id !== id));
@@ -116,7 +116,7 @@ export const Load: React.FC = () => {
     const query = queryString.stringify(loadFilter);
     getList(`?${query}`)
       .then((data: IPagedLoad) => {
-        setLoadList(data.docs);
+        setLoadList(data.data);
         setTotalPages(data.totalPages);
         dispatch(hideLoading());
       })
@@ -213,15 +213,15 @@ export const Load: React.FC = () => {
               handleSelect={handleLoadSelection}
               handleDelete={handleDelete}
               isSelected={selectAll}
-              key={load._id}
-              id={load._id}
+              key={load.id}
+              id={load.id}
               rowNumber={getItemNumber(index)}
               buyer={load.buyer}
               amount={load.amount}
-              number={load.number}
-              is_paid={load.is_paid}
-              createdAt={load.createdAt}
-              updatedAt={load.updatedAt}
+              phone_number={load.phone_number}
+              paid={load.paid}
+              created_at={load.created_at}
+              updated_at={load.updated_at}
             />
           ))}
 

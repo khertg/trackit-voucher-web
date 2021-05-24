@@ -1,28 +1,28 @@
 export interface IVoucher {
-  _id: string;
-  code: string;
-  is_sold: boolean;
-  sold_to?: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string;
+  voucher_code: string;
+  sold: boolean;
+  buyer?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface IPagedVoucher {
-  docs: IVoucher[];
-  totalDocs: number;
+  data: IVoucher[];
+  totalItems: number;
   totalPages: number;
 }
 
 export interface IVoucherFilter {
-  code?: string;
-  sold_to?: string;
-  is_sold?: string;
-  sortBy?: string;
+  voucher_code?: string;
+  buyer?: string;
+  sold?: string;
+  sort_by?: string;
   page?: number;
   limit?: number;
 }
 
 export interface ISelectedVoucher {
   id: string;
-  code: string;
+  voucher_code: string;
 }
