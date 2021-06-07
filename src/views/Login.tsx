@@ -44,7 +44,6 @@ export const Login: React.FC = () => {
                   type="email"
                   {...register('email', { required: 'Email is required!' })}
                   placeholder="Email"
-                  defaultValue="testing@gmail.com"
                 />
               </td>
             </tr>
@@ -63,7 +62,6 @@ export const Login: React.FC = () => {
                     required: 'Password is required!',
                   })}
                   placeholder="Password"
-                  defaultValue="Testing@1123!"
                 />
               </td>
             </tr>
