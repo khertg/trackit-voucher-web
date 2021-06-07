@@ -4,14 +4,14 @@ import history from '../history';
 
 interface IProps {
   isSelected: boolean;
-  handleSelect: (id: string, number: string, isSelected: boolean) => void;
-  handleDelete: (id: string) => void;
+  handleSelect: (id: number, number: string, isSelected: boolean) => void;
+  handleDelete: (id: number) => void;
   rowNumber: number;
-  id: string;
+  id: number;
   buyer: string;
   amount: number;
   phone_number: string;
-  paid: boolean;
+  status: number;
   created_at: string;
   updated_at: string;
 }
@@ -25,7 +25,7 @@ export const LoadItem: React.FC<IProps> = ({
   buyer,
   amount,
   phone_number,
-  paid,
+  status,
   created_at,
   updated_at,
 }) => {
@@ -38,6 +38,16 @@ export const LoadItem: React.FC<IProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSelected]);
+
+  const formatToPeso = (amount: number) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'Php',
+      minimumFractionDigits: 2
+    })
+
+    return formatter.format(amount);
+  }
   return (
     <tr>
       <td>
@@ -55,11 +65,18 @@ export const LoadItem: React.FC<IProps> = ({
       <td>{rowNumber}</td>
       <td>{buyer}</td>
       <td>{phone_number}</td>
-      <td>{amount}</td>
-      <td>{paid ? <span>✔️</span> : <span>❌</span>}</td>
-
-      <td>{Moment(created_at).format('MMM-DD-YYYY hh:mm A')}</td>
-      <td>{Moment(updated_at).format('MMM-DD-YYYY hh:mm A')}</td>
+      <td>{formatToPeso(amount)}</td>
+      <td>
+        {status === 0 && <span>❌ Unpaid</span>}
+        {status === 1 && <span>💰 Paid</span>}
+        {(status > 1 || status < 0) && <span>👽 Unknown</span>}
+      </td>
+      <td>
+        {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+      </td>
+      <td>
+        {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+      </td>
       <td>
         <button
           onClick={(e) => {

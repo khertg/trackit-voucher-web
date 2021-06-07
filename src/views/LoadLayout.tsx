@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
-import { toggleFilter } from '../state/actions/filterAction';
+import { toggleFilterAction } from '../state/modules/load';
 import { Load } from './load/Load';
 import { LoadCreate } from './load/LoadCreate';
 import { LoadEdit } from './load/LoadEdit';
@@ -25,7 +25,7 @@ export const LoadLayout: React.FC = () => {
       &nbsp;
       <button
         onClick={() => {
-          dispatch(toggleFilter());
+          dispatch(toggleFilterAction());
         }}
       >
         Toggle Filter Option

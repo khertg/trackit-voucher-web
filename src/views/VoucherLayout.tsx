@@ -2,13 +2,15 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { deleteAll } from '../services/voucher';
-import { toggleFilter } from '../state/actions/filterAction';
 import { hideLoading, showLoading } from '../state/actions/loadingAction';
+import { setSelectedVoucher } from '../state/actions/voucherAction';
+import { hideGlobalLoading, showGlobalLoading } from '../state/modules/loading';
 import {
-  setReloadVoucher,
-  setSelectedVoucher,
-} from '../state/actions/voucherAction';
-import { VoucherState } from '../state/reducers/voucherReducer';
+  fetchVoucherAction,
+  selectedVoucherSelector,
+  toggleFilterAction,
+  voucherFilterSelector,
+} from '../state/modules/voucher';
 import { NotFound } from './NotFound';
 import { Voucher } from './voucher/Voucher';
 import { VoucherCreate } from './voucher/VoucherCreate';
@@ -17,12 +19,9 @@ import { VoucherEdit } from './voucher/VoucherEdit';
 
 export const VoucherLayout: React.FC = () => {
   //Global state
-  const selectedVoucher = useSelector(
-    (state: VoucherState) => state.voucher.selected
-  );
-  const reloadList = useSelector(
-    (state: VoucherState) => state.voucher.reloadList
-  );
+  const selectedVoucher = useSelector(selectedVoucherSelector);
+  const voucherFilter = useSelector(voucherFilterSelector);
+
   const dispatch = useDispatch();
 
   let { path } = useRouteMatch();
@@ -44,7 +43,7 @@ export const VoucherLayout: React.FC = () => {
       &nbsp;
       <button
         onClick={() => {
-          dispatch(toggleFilter());
+          dispatch(toggleFilterAction());
         }}
       >
         Toggle Filter Option
@@ -57,16 +56,24 @@ export const VoucherLayout: React.FC = () => {
               'Are you sure you want to delete all selected vouchers?'
             )
           ) {
-            dispatch(showLoading());
+            dispatch(showGlobalLoading());
             deleteAll([...selectedVoucher.map(({ id }) => id)])
               .then(() => {
-                dispatch(setReloadVoucher(!reloadList));
-                dispatch(setSelectedVoucher([]));
+                dispatch(
+                  fetchVoucherAction({
+                    ...voucherFilter,
+                    page: 0,
+                  })
+                );
+                alert(
+                  `Successfully deleted ${selectedVoucher.length} vouchers.`
+                );
+                dispatch(hideGlobalLoading());
               })
               .catch((err) => {
                 console.log(err);
                 alert('Error occured while deleting');
-                dispatch(hideLoading());
+                dispatch(hideGlobalLoading());
               });
           }
         }}

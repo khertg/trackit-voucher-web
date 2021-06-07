@@ -9,9 +9,8 @@ export const LoadCreate: React.FC = () => {
   const dispatch = useDispatch();
 
   const onCreate = async (data: any) => {
-    const { buyer, phone_number, amount, paid } = data;
     dispatch(showLoading());
-    create(buyer, phone_number, amount, paid)
+    create(data)
       .then((data) => {
         history.push('/load');
       })
@@ -22,7 +21,7 @@ export const LoadCreate: React.FC = () => {
   };
   return (
     <div>
-      <LoadForm onSubmit={onCreate} />
+      <LoadForm onSubmit={onCreate} preloadedValues={{ status: '0'}}/>
     </div>
   );
 };

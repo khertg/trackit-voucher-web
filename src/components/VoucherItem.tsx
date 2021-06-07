@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import Moment from 'moment';
+import Moment from 'moment-timezone';
 import history from '../history';
+import { disableVoucher, enableVoucher } from '../services/voucher';
+import { useDispatch, useSelector } from 'react-redux';
+import { hideGlobalLoading, showGlobalLoading } from '../state/modules/loading';
+import {
+  fetchVoucherAction,
+  voucherFilterSelector,
+} from '../state/modules/voucher';
 
 interface IProps {
   isSelected: boolean;
   isShow: boolean;
-  handleSelect: (id: string, code: string, isSelected: boolean) => void;
-  handleDelete: (id: string) => void;
-  id: string;
+  handleSelect: (id: number, code: string, isSelected: boolean) => void;
+  handleDelete: (id: number) => void;
+  id: number;
   voucher_code: string;
-  number: number;
-  sold: boolean;
+  status: number | string;
+  active?: number | string;
   buyer?: string;
   created_at: string;
   updated_at: string;
@@ -22,14 +29,16 @@ export const VoucherItem: React.FC<IProps> = ({
   handleDelete,
   id,
   voucher_code,
-  number,
-  sold,
+  status,
+  active,
   buyer,
   created_at,
   updated_at,
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [showVoucherCode, setShowVoucherCode] = useState(false);
+  const voucherFilter = useSelector(voucherFilterSelector);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (isSelected) {
       setIsChecked(true);
@@ -61,7 +70,7 @@ export const VoucherItem: React.FC<IProps> = ({
           checked={isChecked}
         />
       </td>
-      <td>{number}</td>
+      <td>{id}</td>
       <td>
         <div className="voucher-container">
           <button onClick={() => setShowVoucherCode(!showVoucherCode)}>
@@ -75,11 +84,25 @@ export const VoucherItem: React.FC<IProps> = ({
           />
         </div>
       </td>
-      <td>{sold ? <span>✔️</span> : <span>❌</span>}</td>
+      <td>
+        {status === 0 && <span>⏳ Waiting</span>}
+        {status === 1 && <span>💰 Sold</span>}
+        {status === 2 && <span>❌ Unpaid</span>}
+        {status === 3 && <span>😕 Missing</span>}
+        {(status > 3 || status < 0) && <span>👽 Unknown</span>}
+      </td>
+      <td style={{ textAlign: 'center' }}>
+        {active === 0 && <span>🔴</span>}
+        {active === 1 && <span>🟢</span>}
+      </td>
       <td>{buyer ? buyer : '-'}</td>
 
-      <td>{Moment(created_at).format('MMM-DD-YYYY hh:mm A')}</td>
-      <td>{Moment(updated_at).format('MMM-DD-YYYY hh:mm A')}</td>
+      <td>
+        {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+      </td>
+      <td>
+        {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+      </td>
       <td>
         <button
           onClick={(e) => {
@@ -87,6 +110,52 @@ export const VoucherItem: React.FC<IProps> = ({
           }}
         >
           Edit
+        </button>
+        &nbsp;
+        <button
+          onClick={() => {
+            dispatch(showGlobalLoading());
+            enableVoucher(id)
+              .then(() => {
+                dispatch(hideGlobalLoading());
+                dispatch(
+                  fetchVoucherAction({
+                    ...voucherFilter,
+                  })
+                );
+              })
+              .catch((err) => {
+                console.log(err);
+                alert('Error enabling the voucher');
+                dispatch(hideGlobalLoading());
+              });
+          }}
+          disabled={active === 1}
+        >
+          Enable
+        </button>
+        &nbsp;
+        <button
+          onClick={() => {
+            dispatch(showGlobalLoading());
+            disableVoucher(id)
+              .then(() => {
+                dispatch(hideGlobalLoading());
+                dispatch(
+                  fetchVoucherAction({
+                    ...voucherFilter,
+                  })
+                );
+              })
+              .catch((err) => {
+                console.log(err);
+                alert('Error disabling the voucher');
+                dispatch(hideGlobalLoading());
+              });
+          }}
+          disabled={active === 0}
+        >
+          Disable
         </button>
         &nbsp;
         <button

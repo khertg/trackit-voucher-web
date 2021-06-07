@@ -3,26 +3,40 @@ import { VoucherForm } from '../../components/VoucherForm';
 import { create } from '../../services/voucher';
 import history from '../../history';
 import { useDispatch } from 'react-redux';
-import { hideLoading, showLoading } from '../../state/actions/loadingAction';
+import { handleError } from '../../helpers/services-common';
+import {
+  hideGlobalLoading,
+  showGlobalLoading,
+} from '../../state/modules/loading';
 
 export const VoucherCreate: React.FC = () => {
   const dispatch = useDispatch();
 
   const onCreate = async (data: any) => {
-    const { voucher_code, buyer, sold } = data;
-    dispatch(showLoading());
-    create( voucher_code, buyer, sold)
+    dispatch(showGlobalLoading());
+    create(data)
       .then((data) => {
-        history.push('/voucher');
+        const redirect = window.confirm(
+          'Voucher successfully created.\nGo to voucher list?'
+        );
+        if (redirect) {
+          history.push('/voucher');
+        }
+        dispatch(hideGlobalLoading());
       })
       .catch((err) => {
-        console.log(err);
-        dispatch(hideLoading());
+        const errorMsg = handleError(err);
+        const message = errorMsg.join('\n');
+        alert('Error\n' + message);
+        dispatch(hideGlobalLoading());
       });
   };
   return (
     <div>
-      <VoucherForm onSubmit={onCreate} />
+      <VoucherForm
+        onSubmit={onCreate}
+        preloadedValues={{ status: '0', active: '0' }}
+      />
     </div>
   );
 };

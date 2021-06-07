@@ -25,8 +25,8 @@ export const VoucherFilter: React.FC<IProps> = ({
       <table className="no-border">
         <tbody>
           <tr>
-            <td>Voucher Code</td>
-            <td>
+            <td>Code:</td>
+            <td style={{textAlign: 'left'}}>
               <input type="text" {...register('voucher_code')} />
               &nbsp;
               <small className="text-danger">
@@ -35,35 +35,49 @@ export const VoucherFilter: React.FC<IProps> = ({
             </td>
           </tr>
           <tr>
-            <td>Buyer</td>
-            <td>
+            <td>Buyer:</td>
+            <td style={{textAlign: 'left'}}>
               <input type="text" {...register('buyer')} />
             </td>
           </tr>
           <tr>
-            <td></td>
-            <td>
-              <input {...register('sold')} type="radio" value="" id="all" />
+            <td>Status:</td>
+            <td style={{textAlign: 'left'}}>
+              <input {...register('status')} type="radio" value="" id="all" />
               <label htmlFor="all">All</label>&nbsp;
               <input
-                {...register('sold')}
+                {...register('status')}
                 type="radio"
-                value="true"
+                value="1"
                 id="sold"
               />
               <label htmlFor="sold">Sold</label>&nbsp;
               <input
-                {...register('sold')}
+                {...register('status')}
                 type="radio"
-                value="false"
+                value="0"
                 id="not_sold"
               />
-              <label htmlFor="not_sold">Not Sold</label>
+              <label htmlFor="not_sold">Not Sold</label>&nbsp;
+              <input
+                {...register('status')}
+                type="radio"
+                value="2"
+                id="unpaid"
+              />
+              <label htmlFor="unpaid">Unpaid</label>&nbsp;
+              <input
+                {...register('status')}
+                type="radio"
+                value="3"
+                id="missing"
+              />
+              <label htmlFor="missing">Missing</label>&nbsp;
             </td>
           </tr>
           <tr>
-            <td></td>
-            <td>
+            <td>Sort:</td>
+            <td style={{textAlign: 'left'}}>
               <select {...register('sort_by', { required: true })}>
                 <option value="id:desc">Desc</option>
                 <option value="id:asc">Asc</option>
@@ -72,7 +86,7 @@ export const VoucherFilter: React.FC<IProps> = ({
           </tr>
           <tr>
             <td></td>
-            <td>
+            <td style={{textAlign: 'left'}}>
               <button type="submit">Apply Filter</button>
             </td>
           </tr>

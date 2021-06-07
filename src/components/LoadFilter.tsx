@@ -40,22 +40,17 @@ export const LoadFilter: React.FC<IProps> = ({ preloadedValues, onSubmit }) => {
           <tr>
             <td></td>
             <td>
-              <input {...register('paid')} type="radio" value="" id="all" />
+              <input {...register('status')} type="radio" value="" id="all" />
               <label htmlFor="all">All</label>&nbsp;
-              <input
-                {...register('paid')}
-                type="radio"
-                value="true"
-                id="sold"
-              />
+              <input {...register('status')} type="radio" value="1" id="sold" />
               <label htmlFor="sold">Paid</label>&nbsp;
               <input
-                {...register('paid')}
+                {...register('status')}
                 type="radio"
-                value="false"
+                value="0"
                 id="not_sold"
               />
-              <label htmlFor="not_sold">Not Paid</label>
+              <label htmlFor="not_sold">Unpaid</label>
             </td>
           </tr>
           <tr>

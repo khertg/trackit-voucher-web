@@ -1,71 +1,68 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { VoucherFilter } from '../../components/VoucherFilter';
 import { VoucherItem } from '../../components/VoucherItem';
 import { ISelectedPage } from '../../helpers/common';
-import { IPagedVoucher, IVoucher, IVoucherFilter } from '../../models/voucher';
-import { deleteById, getList } from '../../services/voucher';
-import queryString from 'query-string';
+import { IVoucher, IVoucherFilter } from '../../models/voucher';
+import { deleteById } from '../../services/voucher';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../../state/actions/loadingAction';
-import { FilterState } from '../../state/reducers/filterReducer';
 import ReactPaginate from 'react-paginate';
-import { VoucherState } from '../../state/reducers/voucherReducer';
-import { setSelectedVoucher } from '../../state/actions/voucherAction';
+import {
+  fetchVoucherAction,
+  selectedVoucherSelector,
+  voucherFilterSelector,
+  voucherSelector,
+  voucherToggleFilterSelector,
+  voucherTotalPageSelector,
+  voucherRowCountPerPageSelector,
+  updateRowCountPerPageAction,
+  setSelectedVoucherAction,
+  updateFilterAction,
+  voucherCurrenPageSelector,
+  voucherPageFilterSelector,
+} from '../../state/modules/voucher';
+import { useForm } from 'react-hook-form';
+import { hideGlobalLoading, showGlobalLoading } from '../../state/modules/loading';
 
 export const Voucher: React.FC = () => {
   //Global State
-  const selectVoucher = useSelector(
-    (state: VoucherState) => state.voucher.selected
-  );
-  const reloadList = useSelector(
-    (state: VoucherState) => state.voucher.reloadList
-  );
-  const showFilter = useSelector(
-    (state: FilterState) => state.filter.showFilter
-  );
+  const voucherList = useSelector(voucherSelector);
+  const selectVoucher = useSelector(selectedVoucherSelector);
+  const showFilter = useSelector(voucherToggleFilterSelector);
+  const voucherFilter = useSelector(voucherFilterSelector);
+  const totalPage = useSelector(voucherTotalPageSelector);
+  const rowCountPerPage = useSelector(voucherRowCountPerPageSelector);
+  const filterPage = useSelector(voucherPageFilterSelector);
+  const currentPage = useSelector(voucherCurrenPageSelector);
   const dispatch = useDispatch();
 
   //Local State
-  const [voucherList, setVoucherList] = useState<IVoucher[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [itemPerPage, setItemPerPage] = useState<number>(5);
-  const [voucherFilter, setVoucherFilter] = useState<IVoucherFilter>({
-    sold: '',
-    sort_by: 'id:desc',
-    limit: 5,
-    page: 1,
-  });
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [showAllVoucherCode, setShowAllVoucherCode] = useState<boolean>(false);
-  const firstRun = useRef(true);
 
-  useEffect(() => {
-    //Prevents executing codes below in the first load.
-    if (firstRun.current) {
-      firstRun.current = false;
-      return;
-    }
-    dispatch(showLoading());
-    fetchPagedVoucher();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [voucherFilter, reloadList]);
+  const { register } = useForm({
+    defaultValues: { voucher_per_page: rowCountPerPage },
+  });
 
-  const isVoucherExist = (voucherId: string) =>
+  const isVoucherExist = (voucherId: number) =>
     selectVoucher.some(({ id }) => id === voucherId);
 
   const handleVoucherSelection = (
-    id: string,
+    id: number,
     voucher_code: string,
     isSelected: boolean
   ) => {
     if (isSelected) {
       if (!isVoucherExist(id)) {
-        dispatch(setSelectedVoucher([...selectVoucher, { id, voucher_code }]));
+        dispatch(
+          setSelectedVoucherAction([...selectVoucher, { id, voucher_code }])
+        );
       }
     } else {
       dispatch(
-        setSelectedVoucher(selectVoucher.filter((voucher) => voucher.id !== id))
+        setSelectedVoucherAction(
+          selectVoucher.filter((voucher) => voucher.id !== id)
+        )
       );
     }
   };
@@ -76,18 +73,27 @@ export const Voucher: React.FC = () => {
       let vouchers = voucherList.map((voucher) => {
         return { id: voucher.id, voucher_code: voucher.voucher_code };
       });
-      dispatch(setSelectedVoucher(vouchers));
+      dispatch(setSelectedVoucherAction(vouchers));
     } else {
-      dispatch(setSelectedVoucher([]));
+      dispatch(setSelectedVoucherAction([]));
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (window.confirm('Are you sure you want to delete?')) {
-      dispatch(showLoading());
+      dispatch(showGlobalLoading());
       deleteById(id)
         .then(() => {
-          fetchPagedVoucher();
+          dispatch(
+            fetchVoucherAction({
+              ...voucherFilter,
+              page: 0,
+            })
+          );
+          alert(
+            `Successfully deleted voucher with id = ${id}.`
+          );
+          dispatch(hideGlobalLoading());
         })
         .catch((err) => {
           console.log(err);
@@ -98,40 +104,18 @@ export const Voucher: React.FC = () => {
   };
 
   const handleFilter = (filter: IVoucherFilter) => {
-    setCurrentPage(0);
-    setVoucherFilter({ ...voucherFilter, ...filter, page: 0 });
+    dispatch(updateFilterAction({ ...voucherFilter, ...filter, page: 0 }));
   };
 
   const handlePageClick = (data: ISelectedPage) => {
+    const page = data.selected;
     setSelectAll(false);
-    dispatch(setSelectedVoucher([]));
-    setCurrentPage(data.selected);
-    setVoucherFilter({
-      ...voucherFilter,
-      page: data.selected + 1,
-    });
-  };
-
-  const fetchPagedVoucher = () => {
-    const query = queryString.stringify(voucherFilter);
-    getList(`?${query}`)
-      .then((data: IPagedVoucher) => {
-        setVoucherList(data.data);
-        setTotalPages(data.totalPages);
-        dispatch(hideLoading());
+    dispatch(
+      fetchVoucherAction({
+        ...voucherFilter,
+        page: page,
       })
-      .catch((err) => {
-        console.log(err);
-        dispatch(hideLoading());
-      });
-  };
-
-  const getItemNumber = (index: number) => {
-    if (currentPage === 0) {
-      return index + 1;
-    } else {
-      return itemPerPage * currentPage + 1 + index;
-    }
+    );
   };
 
   return (
@@ -148,7 +132,7 @@ export const Voucher: React.FC = () => {
       <table>
         <thead>
           <tr className="no-border">
-            <td colSpan={8}>
+            <td colSpan={9}>
               <div className="paging-header">
                 <div>
                   <ReactPaginate
@@ -156,11 +140,11 @@ export const Voucher: React.FC = () => {
                     nextLabel={'next'}
                     breakLabel={'...'}
                     breakClassName={'break-me'}
-                    pageCount={totalPages}
+                    pageCount={totalPage}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={handlePageClick}
-                    initialPage={currentPage}
+                    initialPage={filterPage}
                     forcePage={currentPage}
                     containerClassName={'pagination'}
                     activeClassName={'active'}
@@ -168,18 +152,14 @@ export const Voucher: React.FC = () => {
                 </div>
                 <div>
                   <select
-                    name="voucher-per-page"
-                    id="voucher-per-page"
+                    id="voucher_per_page"
+                    {...register('voucher_per_page')}
                     onChange={(e) => {
                       setSelectAll(false);
-                      dispatch(setSelectedVoucher([]));
-                      setItemPerPage(parseInt(e.target.value));
-                      setCurrentPage(0);
-                      setVoucherFilter({
-                        ...voucherFilter,
-                        limit: parseInt(e.target.value),
-                        page: 1,
-                      });
+                      const filter = { ...voucherFilter };
+                      filter.limit = parseInt(e.target.value);
+                      filter.page = 0;
+                      dispatch(updateRowCountPerPageAction(filter));
                     }}
                   >
                     <option value="5">5</option>
@@ -203,7 +183,7 @@ export const Voucher: React.FC = () => {
                 checked={selectAll}
               />
             </td>
-            <td>#</td>
+            <td>ID</td>
             <td>
               <button
                 onClick={() => setShowAllVoucherCode(!showAllVoucherCode)}
@@ -212,7 +192,8 @@ export const Voucher: React.FC = () => {
               </button>
               &nbsp;Voucher Code
             </td>
-            <td>Sold</td>
+            <td>Status</td>
+            <td>Active</td>
             <td>Sold To</td>
             <td>Created At</td>
             <td>Updated At</td>
@@ -228,9 +209,9 @@ export const Voucher: React.FC = () => {
               isShow={showAllVoucherCode}
               key={voucher.id}
               id={voucher.id}
-              number={getItemNumber(index)}
               voucher_code={voucher.voucher_code}
-              sold={voucher.sold}
+              status={voucher.status}
+              active={voucher.active}
               buyer={voucher.buyer}
               created_at={voucher.created_at}
               updated_at={voucher.updated_at}
@@ -239,7 +220,7 @@ export const Voucher: React.FC = () => {
 
           {voucherList.length < 1 && (
             <tr>
-              <td colSpan={8}>No results!</td>
+              <td colSpan={9}>No results!</td>
             </tr>
           )}
         </tbody>

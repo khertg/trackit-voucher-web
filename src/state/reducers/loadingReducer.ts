@@ -1,5 +1,10 @@
 import { AnyAction } from 'redux';
-import { HIDE_LOADING, SHOW_LOADING } from '../../helpers/actionTypes';
+import {
+  HIDE_LOADING,
+  HIDE_LOGIN_LOADING,
+  SHOW_LOADING,
+  SHOW_LOGIN_LOADING,
+} from '../../helpers/actionTypes';
 
 export interface LoadingState {
   loading: LocalLoadingState;
@@ -7,9 +12,13 @@ export interface LoadingState {
 
 export interface LocalLoadingState {
   isLoading: boolean;
+  loginLoading: boolean;
 }
 
-const initialState = { isLoading: false } as LocalLoadingState;
+const initialState = {
+  isLoading: false,
+  loginLoading: false,
+} as LocalLoadingState;
 
 const loadingReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -18,6 +27,12 @@ const loadingReducer = (state = initialState, action: AnyAction) => {
       return state;
     case HIDE_LOADING:
       state.isLoading = false;
+      return state;
+    case SHOW_LOGIN_LOADING:
+      state.loginLoading = true;
+      return state;
+    case HIDE_LOGIN_LOADING:
+      state.loginLoading = false;
       return state;
     default:
       return state;

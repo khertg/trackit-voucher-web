@@ -11,15 +11,13 @@ import { hideLoading, showLoading } from '../../state/actions/loadingAction';
 import queryString from 'query-string';
 import { LoadItem } from '../../components/LoadItem';
 import ReactPaginate from 'react-paginate';
-import { ISelectedPage } from '../../helpers/common';
-import { FilterState } from '../../state/reducers/filterReducer';
+import { ISelectedPage, rowPerPage } from '../../helpers/common';
 import { LoadFilter } from '../../components/LoadFilter';
+import { toggleFilterSelector } from '../../state/modules/load';
 
 export const Load: React.FC = () => {
   //Global State
-  const showFilter = useSelector<FilterState>(
-    (state) => state.filter.showFilter
-  );
+  const showFilter = useSelector(toggleFilterSelector);
   const dispatch = useDispatch();
 
   //Local State
@@ -28,10 +26,10 @@ export const Load: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [itemPerPage, setItemPerPage] = useState<number>(5);
   const [loadFilter, setLoadFilter] = useState<ILoadFilter>({
-    paid: '',
+    status: '',
     sort_by: 'created_at:desc',
-    limit: 5,
-    page: 1,
+    limit: rowPerPage(),
+    page: 0,
   });
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedLoad, setSelectedLoad] = useState<ISelectedLoad[]>([]);
@@ -49,7 +47,7 @@ export const Load: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadFilter]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (window.confirm('Are you sure you want to delete?')) {
       dispatch(showLoading());
       deleteById(id)
@@ -73,7 +71,7 @@ export const Load: React.FC = () => {
           buyer: load.buyer,
           amount: load.amount,
           phone_number: load.phone_number,
-          paid: load.paid,
+          status: load.status,
         };
       });
       setSelectedLoad(loads);
@@ -82,11 +80,11 @@ export const Load: React.FC = () => {
     }
   };
 
-  const isLoadExist = (loadId: string) =>
+  const isLoadExist = (loadId: number) =>
     selectedLoad.some(({ id }) => id === loadId);
 
   const handleLoadSelection = (
-    id: string,
+    id: number,
     phone_number: string,
     isSelected: boolean
   ) => {
@@ -103,7 +101,7 @@ export const Load: React.FC = () => {
     setCurrentPage(data.selected);
     setLoadFilter({
       ...loadFilter,
-      page: data.selected + 1,
+      page: data.selected,
     });
   };
 
@@ -173,7 +171,7 @@ export const Load: React.FC = () => {
                       setLoadFilter({
                         ...loadFilter,
                         limit: parseInt(e.target.value),
-                        page: 1,
+                        page: 0,
                       });
                     }}
                   >
@@ -201,7 +199,7 @@ export const Load: React.FC = () => {
             <td>Buyer</td>
             <td>Number</td>
             <td>Amount</td>
-            <td>Paid</td>
+            <td>Status</td>
             <td>Created At</td>
             <td>Updated At</td>
             <td>Options</td>
@@ -219,7 +217,7 @@ export const Load: React.FC = () => {
               buyer={load.buyer}
               amount={load.amount}
               phone_number={load.phone_number}
-              paid={load.paid}
+              status={load.status}
               created_at={load.created_at}
               updated_at={load.updated_at}
             />

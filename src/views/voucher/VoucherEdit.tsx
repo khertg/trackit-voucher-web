@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { VoucherForm } from '../../components/VoucherForm';
-import { IVoucher } from '../../models/voucher';
+import { IVoucher, IVoucherForm } from '../../models/voucher';
 import { edit, get } from '../../services/voucher';
 import history from '../../history';
 import { NotFound } from '../NotFound';
-import { LoadingState } from '../../state/reducers/loadingReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideLoading, showLoading } from '../../state/actions/loadingAction';
+import {
+  globalLoadingSelector,
+  hideGlobalLoading,
+  showGlobalLoading,
+} from '../../state/modules/loading';
 
 interface ParamTypes {
   id: string;
@@ -15,29 +18,29 @@ interface ParamTypes {
 
 export const VoucherEdit: React.FC = () => {
   //Global State
-  const loading = useSelector<LoadingState>((state) => state.loading.isLoading);
+  const loading = useSelector(globalLoadingSelector);
   const dispatch = useDispatch();
 
   //Local State
-  const [voucher, setVoucher] =
-    useState<{ voucher_code: string; buyer?: string; sold?: boolean }>();
+  const [voucher, setVoucher] = useState<IVoucherForm>();
   const { id } = useParams<ParamTypes>();
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(showLoading());
-      await get(id)
+      dispatch(showGlobalLoading());
+      await get(parseInt(id))
         .then((voucherData: IVoucher) => {
-          dispatch(hideLoading());
-          setVoucher({
-            voucher_code: voucherData.voucher_code,
-            buyer: voucherData.buyer,
-            sold: voucherData.sold,
-          });
+          dispatch(hideGlobalLoading());
+          const data: IVoucherForm = {
+            ...voucherData,
+            active: voucherData.active + '',
+            status: voucherData.status + '',
+          };
+          setVoucher(data);
         })
         .catch((err) => {
           console.log(err);
-          dispatch(hideLoading());
+          dispatch(hideGlobalLoading());
         });
     };
     fetchData();
@@ -45,16 +48,21 @@ export const VoucherEdit: React.FC = () => {
   }, []);
 
   const onEdit = async (data: any) => {
-    const { voucher_code, buyer, sold } = data;
-    dispatch(showLoading());
-    edit(id, voucher_code, buyer, sold)
+    dispatch(showGlobalLoading());
+    edit(parseInt(id), data)
       .then((data) => {
-        history.push('/voucher');
+        const redirect = window.confirm(
+          'Voucher successfully updated.\nGo to voucher list?'
+        );
+        if (redirect) {
+          history.push('/voucher');
+        }
+        dispatch(hideGlobalLoading());
       })
       .catch((err) => {
         console.log(err);
         alert('An error occured');
-        dispatch(hideLoading());
+        dispatch(hideGlobalLoading());
       });
   };
 

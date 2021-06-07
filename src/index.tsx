@@ -7,7 +7,7 @@ import history from './history';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 // import { store } from './state';
-import { store } from './state/store';
+import store from './state/configureStore';
 
 ReactDOM.render(
   <React.StrictMode>

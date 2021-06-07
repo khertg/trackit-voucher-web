@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './custom-axios';
 import { IPagedLoad, ILoad } from '../models/load';
 
 const url = `${process.env.REACT_APP_API_URL}/api/v1/load`;
@@ -11,36 +11,13 @@ export async function getList(queryString?: string) {
     });
 }
 
-export async function create(
-  buyer: string,
-  phone_number: string,
-  amount: number,
-  paid?: boolean
-) {
-  const data = {
-    buyer,
-    phone_number,
-    amount,
-    paid,
-  };
+export async function create(data: any) {
   return await axios.post<{ result: ILoad }>(url, data).then((response) => {
     return response.data.result;
   });
 }
 
-export async function edit(
-  id: string,
-  buyer: string,
-  phone_number: string,
-  amount: number,
-  paid?: boolean
-) {
-  const data = {
-    buyer,
-    phone_number,
-    amount,
-    paid,
-  };
+export async function edit(id: number, data: any) {
   return await axios
     .patch<{ result: ILoad }>(`${url}/${id}`, data)
     .then((response) => {
@@ -54,7 +31,7 @@ export async function get(id: string) {
   });
 }
 
-export async function deleteById(id: string) {
+export async function deleteById(id: number) {
   return await axios
     .delete<{ result: ILoad }>(`${url}/${id}`)
     .then((response) => {

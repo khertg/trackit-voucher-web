@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import history from '../../history';
 import { NotFound } from '../NotFound';
-import { LoadingState } from '../../state/reducers/loadingReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideLoading, showLoading } from '../../state/actions/loadingAction';
 import { ILoad } from '../../models/load';
 import { edit, get } from '../../services/load';
 import { LoadForm } from '../../components/LoadForm';
+import {
+  globalLoadingSelector,
+  hideGlobalLoading,
+  showGlobalLoading,
+} from '../../state/modules/loading';
 
 interface ParamTypes {
   id: string;
@@ -15,7 +18,7 @@ interface ParamTypes {
 
 export const LoadEdit: React.FC = () => {
   //Global State
-  const loading = useSelector<LoadingState>((state) => state.loading.isLoading);
+  const loading = useSelector(globalLoadingSelector);
   const dispatch = useDispatch();
 
   //Local State
@@ -24,26 +27,26 @@ export const LoadEdit: React.FC = () => {
       buyer: string;
       phone_number: string;
       amount: number;
-      paid: boolean;
+      status: string;
     }>();
   const { id } = useParams<ParamTypes>();
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(showLoading());
+      dispatch(showGlobalLoading());
       await get(id)
         .then((loadData: ILoad) => {
-          dispatch(hideLoading());
           setLoad({
             buyer: loadData.buyer,
             phone_number: loadData.phone_number,
             amount: loadData.amount,
-            paid: loadData.paid,
+            status: loadData.status + '',
           });
+          dispatch(hideGlobalLoading());
         })
         .catch((err) => {
           console.log(err);
-          dispatch(hideLoading());
+          dispatch(hideGlobalLoading());
         });
     };
     fetchData();
@@ -51,16 +54,16 @@ export const LoadEdit: React.FC = () => {
   }, []);
 
   const onEdit = async (data: any) => {
-    const { buyer, phone_number, amount, paid } = data;
-    dispatch(showLoading());
-    edit(id, buyer, phone_number, amount, paid)
+    dispatch(showGlobalLoading());
+    edit(parseInt(id), data)
       .then((data) => {
         history.push('/load');
+        dispatch(hideGlobalLoading());
       })
       .catch((err) => {
         console.log(err);
         alert('An error occured');
-        dispatch(hideLoading());
+        dispatch(hideGlobalLoading());
       });
   };
 
