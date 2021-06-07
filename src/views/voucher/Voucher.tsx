@@ -5,7 +5,7 @@ import { ISelectedPage } from '../../helpers/common';
 import { IVoucher, IVoucherFilter } from '../../models/voucher';
 import { deleteById } from '../../services/voucher';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideLoading, showLoading } from '../../state/actions/loadingAction';
+import { hideLoading } from '../../state/actions/loadingAction';
 import ReactPaginate from 'react-paginate';
 import {
   fetchVoucherAction,
@@ -22,7 +22,10 @@ import {
   voucherPageFilterSelector,
 } from '../../state/modules/voucher';
 import { useForm } from 'react-hook-form';
-import { hideGlobalLoading, showGlobalLoading } from '../../state/modules/loading';
+import {
+  hideGlobalLoading,
+  showGlobalLoading,
+} from '../../state/modules/loading';
 
 export const Voucher: React.FC = () => {
   //Global State
@@ -90,9 +93,7 @@ export const Voucher: React.FC = () => {
               page: 0,
             })
           );
-          alert(
-            `Successfully deleted voucher with id = ${id}.`
-          );
+          alert(`Successfully deleted voucher with id = ${id}.`);
           dispatch(hideGlobalLoading());
         })
         .catch((err) => {

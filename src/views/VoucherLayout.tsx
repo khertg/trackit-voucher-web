@@ -2,8 +2,6 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { deleteAll } from '../services/voucher';
-import { hideLoading, showLoading } from '../state/actions/loadingAction';
-import { setSelectedVoucher } from '../state/actions/voucherAction';
 import { hideGlobalLoading, showGlobalLoading } from '../state/modules/loading';
 import {
   fetchVoucherAction,

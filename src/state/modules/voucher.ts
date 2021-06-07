@@ -1,4 +1,4 @@
-import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../configureStore';
 import {
   IPagedVoucher,
