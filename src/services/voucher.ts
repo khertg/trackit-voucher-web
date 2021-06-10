@@ -108,7 +108,7 @@ export async function enableVoucher(id: number) {
     },
   };
   return await axios
-    .post<any>(`${url}/enable-voucher`, { id }, config)
+    .post<any>(`${url}/enable`, { id }, config)
     .then((response) => {
       return response.data.result;
     });
@@ -121,7 +121,20 @@ export async function disableVoucher(id: number) {
     },
   };
   return await axios
-    .post<any>(`${url}/disable-voucher`, { id }, config)
+    .post<any>(`${url}/disable`, { id }, config)
+    .then((response) => {
+      return response.data.result;
+    });
+}
+
+export async function soldEnableManyVoucher(buyer: string, ids: number[]) {
+  const config = {
+    headers: {
+      ...getAuthHeader(),
+    },
+  };
+  return await axios
+    .post<any>(`${url}/sold-enable-many`, { buyer, ids }, config)
     .then((response) => {
       return response.data.result;
     });

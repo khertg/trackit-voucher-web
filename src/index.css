@@ -59,6 +59,7 @@ table.no-border th {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 
 .loading-dialog {
@@ -175,3 +176,144 @@ table.no-border th {
 }
 
 /* END OF LOADING SPINNER */
+
+.sub-nav li a {
+  color: #141517;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  border-bottom: 2px solid #fff;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0 16px;
+}
+
+.sub-nav li a:hover,
+.sub-nav li a:focus,
+.sub-nav li.active a {
+  color: #141517;
+  border-bottom: 2px solid #fd3a13;
+}
+
+.general-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-header {
+  background-color: inherit;
+  display: none;
+  margin-left: 16px;
+}
+
+.title-actions {
+  display: flex;
+  overflow-x: auto;
+  background-color: inherit;
+  padding: 10px 0;
+}
+
+.title-actions div:first-child {
+  margin-left: 16px;
+}
+
+.title-actions div:last-child {
+  margin-right: 16px;
+}
+
+.custom-table {
+  width: 100%;
+  border: none;
+}
+
+.custom-table thead {
+  display: none;
+}
+
+.custom-table tbody tr {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 9px 0px rgb(0, 0, 0, 0.1);
+  border: 1.5px solid rgba(128, 128, 128, 0.18);
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.custom-table tbody tr td {
+  border: none;
+  margin: 5px 0;
+}
+
+.custom-table tbody tr td div {
+  text-align: left;
+}
+
+.custom-table tbody tr td div.d-flex {
+  align-items: center;
+}
+
+/* Table Label */
+.custom-table tbody tr td div label {
+  font-weight: 500;
+  margin: 0;
+  /* border: 1px dotted red; */
+  width: 30%;
+}
+
+/* Table Value */
+.custom-table tbody tr td div.d-flex div {
+  /* border: 1px dotted green; */
+  width: 70%;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .title-header {
+    display: block;
+  }
+
+  .custom-table {
+    width: 100%;
+    border: 1px solid black;
+  }
+
+  .custom-table thead {
+    display: table-header-group;
+  }
+
+  .custom-table tbody tr {
+    display: table-row;
+    background-color: inherit; 
+    margin-bottom: unset;
+    box-shadow: unset;
+    border: unset;
+    border-radius: unset;
+    padding: unset;
+  }
+
+  .custom-table tbody tr td {
+    margin: 5px 0;
+  }
+
+  .custom-table tbody tr td div {
+    text-align: left;
+  }
+
+  .custom-table tbody tr td div.d-flex {
+    align-items: center;
+  }
+
+  /* Table Label */
+  .custom-table tbody tr td div label {
+    width: unset;
+    display: none;
+  }
+
+  /* Table Value */
+  .custom-table tbody tr td div.d-flex div {
+    width: unset;
+  }
+}

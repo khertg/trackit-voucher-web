@@ -19,14 +19,19 @@ export const getAxiosConfig = () => {
 
 export const handleError = (e: any): string[] => {
   const errorMsgArr = [];
-  const { general, fields } = e.response.data.result.errors;
+  if (e.response) {
+    const { general, fields } = e.response.data.result.errors;
 
-  if (general) {
-    errorMsgArr.push(general.message);
-  }
+    if (general) {
+      errorMsgArr.push(general.message);
+    }
 
-  if (fields) {
-    errorMsgArr.push(fields.map((value: any) => value.msg));
+    if (fields) {
+      errorMsgArr.push(fields.map((value: any) => value.msg));
+    }
+  }else {
+    alert(e.message)
+    errorMsgArr.push('Something went wrong.')
   }
   return errorMsgArr;
 };

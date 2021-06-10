@@ -8,6 +8,7 @@ import {
   fetchVoucherAction,
   voucherFilterSelector,
 } from '../state/modules/voucher';
+import { Button, Form } from 'react-bootstrap';
 
 interface IProps {
   isSelected: boolean;
@@ -70,50 +71,98 @@ export const VoucherItem: React.FC<IProps> = ({
           checked={isChecked}
         />
       </td>
-      <td>{id}</td>
       <td>
-        <div className="voucher-container">
-          <button onClick={() => setShowVoucherCode(!showVoucherCode)}>
-            {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
-          </button>
-          &nbsp;
-          <input
-            size={10}
-            type={showVoucherCode ? 'text' : 'password'}
-            defaultValue={voucher_code}
-          />
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">ID</label>
+          <div className="value flex-grow-1 flex-shrink-1">{id}</div>
         </div>
       </td>
       <td>
-        {status === 0 && <span>⏳ Waiting</span>}
-        {status === 1 && <span>💰 Sold</span>}
-        {status === 2 && <span>❌ Unpaid</span>}
-        {status === 3 && <span>😕 Missing</span>}
-        {(status > 3 || status < 0) && <span>👽 Unknown</span>}
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Voucher</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            <div className="voucher-container">
+              <Button
+                variant="light"
+                size="sm"
+                onClick={() => setShowVoucherCode(!showVoucherCode)}
+              >
+                {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+              </Button>
+              &nbsp;
+              <Form.Control
+                size="sm"
+                type={showVoucherCode ? 'text' : 'password'}
+                defaultValue={voucher_code}
+              />
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Status</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            {status === 0 && <span>⏳ Waiting</span>}
+            {status === 1 && <span>💰 Sold</span>}
+            {status === 2 && <span>❌ Unpaid</span>}
+            {status === 3 && <span>😕 Missing</span>}
+            {(status > 3 || status < 0) && <span>👽 Unknown</span>}
+          </div>
+        </div>
       </td>
       <td style={{ textAlign: 'center' }}>
-        {active === 0 && <span>🔴</span>}
-        {active === 1 && <span>🟢</span>}
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Active</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            {' '}
+            {active === 0 && <span>🔴</span>}
+            {active === 1 && <span>🟢</span>}
+          </div>
+        </div>
       </td>
-      <td>{buyer ? buyer : '-'}</td>
+      <td>
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Buyer</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            {buyer ? buyer : '-'}
+          </div>
+        </div>
+      </td>
 
       <td>
-        {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Created</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+          </div>
+        </div>
       </td>
       <td>
-        {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+        <div className="d-flex">
+          <label className="flex-grow-1 flex-shrink-1">Updated</label>
+          <div className="value flex-grow-1 flex-shrink-1">
+            {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
+          </div>
+        </div>
       </td>
       <td>
-        <button
+        <Button
+          style={{ minWidth: '60px' }}
+          variant="info"
+          size="sm"
           onClick={(e) => {
             history.push(`/voucher/edit/${id}`);
           }}
         >
           Edit
-        </button>
+        </Button>
         &nbsp;
-        <button
+        <Button
+          variant="success"
+          size="sm"
           onClick={() => {
+            window.scrollTo(0, 0);
             dispatch(showGlobalLoading());
             enableVoucher(id)
               .then(() => {
@@ -133,10 +182,13 @@ export const VoucherItem: React.FC<IProps> = ({
           disabled={active === 1}
         >
           Enable
-        </button>
+        </Button>
         &nbsp;
-        <button
+        <Button
+          variant="warning"
+          size="sm"
           onClick={() => {
+            window.scrollTo(0, 0);
             dispatch(showGlobalLoading());
             disableVoucher(id)
               .then(() => {
@@ -156,15 +208,18 @@ export const VoucherItem: React.FC<IProps> = ({
           disabled={active === 0}
         >
           Disable
-        </button>
+        </Button>
         &nbsp;
-        <button
+        <Button
+          variant="danger"
+          size="sm"
           onClick={() => {
+            window.scrollTo(0, 0);
             handleDelete(id);
           }}
         >
           Delete
-        </button>
+        </Button>
       </td>
     </tr>
   );

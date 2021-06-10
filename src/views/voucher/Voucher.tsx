@@ -26,6 +26,7 @@ import {
   hideGlobalLoading,
   showGlobalLoading,
 } from '../../state/modules/loading';
+import { Row, Col, Button, Form } from 'react-bootstrap';
 
 export const Voucher: React.FC = () => {
   //Global State
@@ -130,102 +131,116 @@ export const Voucher: React.FC = () => {
           <br />
         </Fragment>
       )}
-      <table>
-        <thead>
-          <tr className="no-border">
-            <td colSpan={9}>
-              <div className="paging-header">
-                <div>
-                  <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'break-me'}
-                    pageCount={totalPage}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    initialPage={filterPage}
-                    forcePage={currentPage}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
+      <Row>
+        <Col>
+          <div className="table-responsive">
+            <table className="custom-table">
+              <thead>
+                <tr className="no-border">
+                  <td colSpan={9}>
+                    <div className="paging-header">
+                      <div>
+                        <ReactPaginate
+                          previousLabel={'previous'}
+                          nextLabel={'next'}
+                          breakLabel={'...'}
+                          breakClassName={'break-me'}
+                          pageCount={totalPage}
+                          marginPagesDisplayed={2}
+                          pageRangeDisplayed={5}
+                          onPageChange={handlePageClick}
+                          initialPage={filterPage}
+                          forcePage={currentPage}
+                          containerClassName={'pagination'}
+                          activeClassName={'active'}
+                        />
+                      </div>
+                      <div>
+                        <div className="d-flex">
+                        <Form.Control
+                          as="select"
+                          id="voucher_per_page"
+                          className="form-control-sm"
+                          style={{width: '59px'}}
+                          {...register('voucher_per_page')}
+                          onChange={(e) => {
+                            setSelectAll(false);
+                            const filter = { ...voucherFilter };
+                            filter.limit = parseInt(e.target.value);
+                            filter.page = 0;
+                            dispatch(updateRowCountPerPageAction(filter));
+                          }}
+                        >
+                          <option value="5">5</option>
+                          <option value="10">10</option>
+                          <option value="15">15</option>
+                          <option value="20">20</option>
+                        </Form.Control>
+                        &nbsp;
+                        <label style={{width: '65px'}} htmlFor="voucher-per-page">per page</label>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        handleSelectAll(e.target.checked);
+                      }}
+                      checked={selectAll}
+                    />
+                  </td>
+                  <td>ID</td>
+                  <td>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      onClick={() => setShowAllVoucherCode(!showAllVoucherCode)}
+                    >
+                      {showAllVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+                    </Button>
+                    &nbsp;Voucher Code
+                  </td>
+                  <td>Status</td>
+                  <td>Active</td>
+                  <td>Sold To</td>
+                  <td>Created At</td>
+                  <td>Updated At</td>
+                  <td>Options</td>
+                </tr>
+              </thead>
+              <tbody>
+                {voucherList.map((voucher: IVoucher, index) => (
+                  <VoucherItem
+                    handleSelect={handleVoucherSelection}
+                    handleDelete={handleDelete}
+                    isSelected={selectAll}
+                    isShow={showAllVoucherCode}
+                    key={voucher.id}
+                    id={voucher.id}
+                    voucher_code={voucher.voucher_code}
+                    status={voucher.status}
+                    active={voucher.active}
+                    buyer={voucher.buyer}
+                    created_at={voucher.created_at}
+                    updated_at={voucher.updated_at}
                   />
-                </div>
-                <div>
-                  <select
-                    id="voucher_per_page"
-                    {...register('voucher_per_page')}
-                    onChange={(e) => {
-                      setSelectAll(false);
-                      const filter = { ...voucherFilter };
-                      filter.limit = parseInt(e.target.value);
-                      filter.page = 0;
-                      dispatch(updateRowCountPerPageAction(filter));
-                    }}
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                  </select>
-                  &nbsp;
-                  <label htmlFor="voucher-per-page">per page</label>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  handleSelectAll(e.target.checked);
-                }}
-                checked={selectAll}
-              />
-            </td>
-            <td>ID</td>
-            <td>
-              <button
-                onClick={() => setShowAllVoucherCode(!showAllVoucherCode)}
-              >
-                {showAllVoucherCode ? <span>🙉</span> : <span>🙈</span>}
-              </button>
-              &nbsp;Voucher Code
-            </td>
-            <td>Status</td>
-            <td>Active</td>
-            <td>Sold To</td>
-            <td>Created At</td>
-            <td>Updated At</td>
-            <td>Options</td>
-          </tr>
-        </thead>
-        <tbody>
-          {voucherList.map((voucher: IVoucher, index) => (
-            <VoucherItem
-              handleSelect={handleVoucherSelection}
-              handleDelete={handleDelete}
-              isSelected={selectAll}
-              isShow={showAllVoucherCode}
-              key={voucher.id}
-              id={voucher.id}
-              voucher_code={voucher.voucher_code}
-              status={voucher.status}
-              active={voucher.active}
-              buyer={voucher.buyer}
-              created_at={voucher.created_at}
-              updated_at={voucher.updated_at}
-            />
-          ))}
+                ))}
 
-          {voucherList.length < 1 && (
-            <tr>
-              <td colSpan={9}>No results!</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+                {voucherList.length < 1 && (
+                  <tr>
+                    <td colSpan={9}>No results!</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Col>
+      </Row>
+      <br />
     </div>
   );
 };

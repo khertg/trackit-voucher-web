@@ -140,96 +140,98 @@ export const Load: React.FC = () => {
           <br />
         </Fragment>
       )}
-      <table>
-        <thead>
-          <tr className="no-border">
-            <td colSpan={9}>
-              <div className="paging-header">
-                <div>
-                  <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'break-me'}
-                    pageCount={totalPages}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={handlePageClick}
-                    initialPage={currentPage}
-                    forcePage={currentPage}
-                    containerClassName={'pagination'}
-                    activeClassName={'active'}
-                  />
+      <div className="table-responsive">
+        <table>
+          <thead>
+            <tr className="no-border">
+              <td colSpan={9}>
+                <div className="paging-header">
+                  <div>
+                    <ReactPaginate
+                      previousLabel={'previous'}
+                      nextLabel={'next'}
+                      breakLabel={'...'}
+                      breakClassName={'break-me'}
+                      pageCount={totalPages}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={handlePageClick}
+                      initialPage={currentPage}
+                      forcePage={currentPage}
+                      containerClassName={'pagination'}
+                      activeClassName={'active'}
+                    />
+                  </div>
+                  <div>
+                    <select
+                      name="voucher-per-page"
+                      id="voucher-per-page"
+                      onChange={(e) => {
+                        setItemPerPage(parseInt(e.target.value));
+                        setCurrentPage(0);
+                        setLoadFilter({
+                          ...loadFilter,
+                          limit: parseInt(e.target.value),
+                          page: 0,
+                        });
+                      }}
+                    >
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                    </select>
+                    &nbsp;
+                    <label htmlFor="voucher-per-page">per page</label>
+                  </div>
                 </div>
-                <div>
-                  <select
-                    name="voucher-per-page"
-                    id="voucher-per-page"
-                    onChange={(e) => {
-                      setItemPerPage(parseInt(e.target.value));
-                      setCurrentPage(0);
-                      setLoadFilter({
-                        ...loadFilter,
-                        limit: parseInt(e.target.value),
-                        page: 0,
-                      });
-                    }}
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                  </select>
-                  &nbsp;
-                  <label htmlFor="voucher-per-page">per page</label>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  handleSelectAll(e.target.checked);
-                }}
-              />
-            </td>
-            <td>#</td>
-            <td>Buyer</td>
-            <td>Number</td>
-            <td>Amount</td>
-            <td>Status</td>
-            <td>Created At</td>
-            <td>Updated At</td>
-            <td>Options</td>
-          </tr>
-        </thead>
-        <tbody>
-          {loadList.map((load: ILoad, index) => (
-            <LoadItem
-              handleSelect={handleLoadSelection}
-              handleDelete={handleDelete}
-              isSelected={selectAll}
-              key={load.id}
-              id={load.id}
-              rowNumber={getItemNumber(index)}
-              buyer={load.buyer}
-              amount={load.amount}
-              phone_number={load.phone_number}
-              status={load.status}
-              created_at={load.created_at}
-              updated_at={load.updated_at}
-            />
-          ))}
-
-          {loadList.length < 1 && (
-            <tr>
-              <td colSpan={9}>No results!</td>
+              </td>
             </tr>
-          )}
-        </tbody>
-      </table>
+            <tr>
+              <td>
+                <input
+                  type="checkbox"
+                  onChange={(e) => {
+                    handleSelectAll(e.target.checked);
+                  }}
+                />
+              </td>
+              <td>#</td>
+              <td>Buyer</td>
+              <td>Number</td>
+              <td>Amount</td>
+              <td>Status</td>
+              <td>Created At</td>
+              <td>Updated At</td>
+              <td>Options</td>
+            </tr>
+          </thead>
+          <tbody>
+            {loadList.map((load: ILoad, index) => (
+              <LoadItem
+                handleSelect={handleLoadSelection}
+                handleDelete={handleDelete}
+                isSelected={selectAll}
+                key={load.id}
+                id={load.id}
+                rowNumber={getItemNumber(index)}
+                buyer={load.buyer}
+                amount={load.amount}
+                phone_number={load.phone_number}
+                status={load.status}
+                created_at={load.created_at}
+                updated_at={load.updated_at}
+              />
+            ))}
+
+            {loadList.length < 1 && (
+              <tr>
+                <td colSpan={9}>No results!</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

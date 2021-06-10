@@ -49,12 +49,11 @@ const api: Middleware<PromiseDispatch> =
       if (payload.onEnd) dispatch({ type: payload.onEnd });
     } catch (error) {
       const errorMsgArr = handleError(error);
-      console.log(error.response);
 
       // General
       dispatch(actions.apiCallFailed(errorMsgArr));
 
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         dispatch(logoutUser());
       }
 

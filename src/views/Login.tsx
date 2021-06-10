@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { errorSelector, loadingSelector, login } from '../state/modules/auth';
@@ -21,70 +22,57 @@ export const Login: React.FC = () => {
 
   return (
     <div style={style}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <table className="no-border">
-          <tbody>
-            <tr>
-              <td style={{ textAlign: 'center' }}>LOGIN PAGE </td>
-            </tr>
-            {errorArr.length > 0 && (
-              <tr>
-                <td>
-                  {errorArr.map((msg) => (
-                    <span className="text-danger" style={{ fontSize: '13px' }}>
-                      {msg}
-                    </span>
-                  ))}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>
-                <input
-                  type="email"
-                  {...register('email', { required: 'Email is required!' })}
-                  placeholder="Email"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <small className="text-danger">
-                  {errors.email && errors.email.message}
-                </small>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <input
-                  type="password"
-                  {...register('password', {
-                    required: 'Password is required!',
-                  })}
-                  placeholder="Password"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <small className="text-danger">
-                  {errors.password && errors.password.message}
-                </small>
-              </td>
-            </tr>
-            <tr>
-              <td style={{ textAlign: 'center' }}>
-                <button type="submit">
-                  <div style={centerStyle}>
-                    <div>Login&nbsp;</div>
-                    {loading && <div className="loader"></div>}
-                  </div>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+      <Card style={{ width: '18rem' }}>
+        <Card.Body>
+          <Card.Title style={{ textAlign: 'center' }} className="mb-4">
+            Login
+          </Card.Title>
+          {errorArr.map((msg, index) => (
+            <span className="text-danger" style={{ fontSize: '13px' }}>
+              {msg}
+            </span>
+          ))}
+
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Control
+                size="sm"
+                type="email"
+                placeholder="Enter email"
+                className={errors.email && 'is-invalid'}
+                {...register('email', { required: 'Email is required!' })}
+              />
+              <div className="invalid-feedback">
+                {errors.email && errors.email.message}
+              </div>
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Control
+                size="sm"
+                type="password"
+                placeholder="Password"
+                className={errors.password && 'is-invalid'}
+                {...register('password', {
+                  required: 'Password is required!',
+                })}
+              />
+              <div className="invalid-feedback">
+                {errors.password && errors.password.message}
+              </div>
+            </Form.Group>
+            <Button
+              type="submit"
+              variant="primary"
+              size="sm"
+              block
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Submit'}
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
     </div>
   );
 };
@@ -94,10 +82,4 @@ const style = {
   justifyContent: 'center',
   alignItems: 'center',
   height: '300px',
-};
-
-const centerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
 };
