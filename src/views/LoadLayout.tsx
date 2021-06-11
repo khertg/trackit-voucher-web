@@ -12,7 +12,7 @@ export const LoadLayout: React.FC = () => {
 
   let { path } = useRouteMatch();
   return (
-    <div style={{ backgroundColor: '#EBEBEB' }}>
+    <div style={{ backgroundColor: '#f4f4f4' }}>
       <h2>Load</h2>
       <NavLink to="/load">
         <button>Load List</button>

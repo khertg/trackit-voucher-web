@@ -3,7 +3,7 @@ import { Button, Container, Jumbotron, Col, Row } from 'react-bootstrap';
 
 export const Home: React.FC = ({}) => {
   return (
-    <div style={{ backgroundColor: '#EBEBEB', height: '100%' }}>
+    <div style={{ backgroundColor: '#f4f4f4', height: '100%' }}>
       <Container fluid>
         <br />
         <Col>

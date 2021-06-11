@@ -87,7 +87,7 @@ export const VoucherLayout: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#EBEBEB' }}>
+    <div style={{ backgroundColor: '#f4f4f4' }}>
       <div className="general-header" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
         <div className="title-header">
           <h2>Voucher</h2>
@@ -173,7 +173,7 @@ export const VoucherLayout: React.FC = () => {
         </div>
       </div>
 
-      <Container fluid style={{ backgroundColor: '#EBEBEB' }}>
+      <Container fluid style={{ backgroundColor: '#f4f4f4' }}>
         <Switch>
           <Route exact path={path}>
             <Voucher />
