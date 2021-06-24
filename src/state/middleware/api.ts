@@ -19,7 +19,6 @@ const api: Middleware<PromiseDispatch> =
     if (payload.onStart) dispatch({ type: payload.onStart });
     if (payload.onProcess) dispatch({ type: payload.onProcess });
     if (payload.onUpdateFilter) {
-      console.log(payload.filterPayload);
       dispatch({
         type: payload.onUpdateFilter,
         payload: payload.filterPayload,
