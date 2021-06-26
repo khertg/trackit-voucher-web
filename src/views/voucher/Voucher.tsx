@@ -131,7 +131,7 @@ export const Voucher: React.FC = () => {
     const startCount = endCount - (getValues().voucher_per_page - 1);
     return (
       <div>
-        Showing {startCount}-{endCount} results of {totalVoucher}
+        Showing {startCount}-{endCount} of {totalVoucher}
       </div>
     );
   };
