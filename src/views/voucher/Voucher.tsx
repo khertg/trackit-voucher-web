@@ -157,27 +157,32 @@ export const Voucher: React.FC = () => {
                       </div>
                       <div>
                         <div className="d-flex">
-                        <Form.Control
-                          as="select"
-                          id="voucher_per_page"
-                          className="form-control-sm"
-                          style={{width: '59px'}}
-                          {...register('voucher_per_page')}
-                          onChange={(e) => {
-                            setSelectAll(false);
-                            const filter = { ...voucherFilter };
-                            filter.limit = parseInt(e.target.value);
-                            filter.page = 0;
-                            dispatch(updateRowCountPerPageAction(filter));
-                          }}
-                        >
-                          <option value="5">5</option>
-                          <option value="10">10</option>
-                          <option value="15">15</option>
-                          <option value="20">20</option>
-                        </Form.Control>
-                        &nbsp;
-                        <label style={{width: '65px'}} htmlFor="voucher-per-page">per page</label>
+                          <Form.Control
+                            as="select"
+                            id="voucher_per_page"
+                            className="form-control-sm"
+                            style={{ width: '59px' }}
+                            {...register('voucher_per_page')}
+                            onChange={(e) => {
+                              setSelectAll(false);
+                              const filter = { ...voucherFilter };
+                              filter.limit = parseInt(e.target.value);
+                              filter.page = 0;
+                              dispatch(updateRowCountPerPageAction(filter));
+                            }}
+                          >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                          </Form.Control>
+                          &nbsp;
+                          <label
+                            style={{ width: '65px' }}
+                            htmlFor="voucher-per-page"
+                          >
+                            per page
+                          </label>
                         </div>
                       </div>
                     </div>
@@ -210,6 +215,40 @@ export const Voucher: React.FC = () => {
                   <td>Created At</td>
                   <td>Updated At</td>
                   <td>Options</td>
+                </tr>
+                <tr className="mobile-view">
+                  <td>
+                    <div className="d-flex align-items-center">
+                      <div>
+                        <input
+                          type="checkbox"
+                          onChange={(e) => {
+                            handleSelectAll(e.target.checked);
+                          }}
+                          checked={selectAll}
+                        />
+                      </div>
+                      <div style={{ paddingLeft: '15px' }}>
+                        <Button
+                          variant="light"
+                          size="sm"
+                          onClick={() =>
+                            setShowAllVoucherCode(!showAllVoucherCode)
+                          }
+                        >
+                          {showAllVoucherCode ? (
+                            <span>🙉</span>
+                          ) : (
+                            <span>🙈</span>
+                          )}
+                        </Button>
+                      </div>
+                      &nbsp;
+                      <div>
+                        Voucher List
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               </thead>
               <tbody>

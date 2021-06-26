@@ -8,7 +8,9 @@ import {
   fetchVoucherAction,
   voucherFilterSelector,
 } from '../state/modules/voucher';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Dropdown, Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
   isSelected: boolean;
@@ -23,6 +25,23 @@ interface IProps {
   created_at: string;
   updated_at: string;
 }
+
+const CustomToggle = React.forwardRef<HTMLButtonElement, any>(
+  ({ children, onClick }, ref) => (
+    <button
+      className="invi-btn"
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+    >
+      {children}
+      <FontAwesomeIcon icon={faEllipsisV} />
+    </button>
+  )
+);
+
 export const VoucherItem: React.FC<IProps> = ({
   isSelected,
   isShow,
@@ -57,19 +76,86 @@ export const VoucherItem: React.FC<IProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShow]);
+
+  const getStatus = (status: number | string, showLabel: boolean = true) => {
+    switch (status) {
+      case 0:
+        return <span>⏳ {showLabel && 'Waiting'}</span>;
+      case 1:
+        return <span>💰 {showLabel && 'Sold'}</span>;
+      case 2:
+        return <span>❌ {showLabel && 'Unpaid'}</span>;
+      case 3:
+        return <span>😕 {showLabel && 'Missing'}</span>;
+      default:
+        return <span>👽 {showLabel && 'Unknown'}</span>;
+    }
+  };
+
+  const getActiveStatus = (activeStatus: number | string | undefined) => {
+    if (activeStatus === 0) {
+      return <span>🔴</span>;
+    } else if (activeStatus === 1) {
+      return <span>🟢</span>;
+    } else {
+      return <span>👽</span>;
+    }
+  };
+
   return (
     <tr>
       <td>
-        <input
-          type="checkbox"
-          className="select-item"
-          onChange={(e) => {
-            setIsChecked(!isChecked);
-            handleSelect(id, voucher_code, e.target.checked);
-          }}
-          value={id}
-          checked={isChecked}
-        />
+        <div className="checkbox-container">
+          <div>
+            <input
+              type="checkbox"
+              className="select-item"
+              onChange={(e) => {
+                setIsChecked(!isChecked);
+                handleSelect(id, voucher_code, e.target.checked);
+              }}
+              value={id}
+              checked={isChecked}
+            />
+          </div>
+          <div className="mobile-view voucher-wrapper">
+            <div className="voucher-container">
+              <Button
+                variant="light"
+                size="sm"
+                onClick={() => setShowVoucherCode(!showVoucherCode)}
+              >
+                {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+              </Button>
+              &nbsp;
+              <Form.Control
+                size="sm"
+                type={showVoucherCode ? 'text' : 'password'}
+                defaultValue={voucher_code}
+              />
+            </div>
+          </div>
+          &nbsp;&nbsp;
+          <div className="mobile-view d-flex">
+            <div className="value flex-grow-1 flex-shrink-1">
+              {getActiveStatus(active)}
+            </div>
+          </div>
+          &nbsp;&nbsp;
+          <div className="mobile-view d-flex">
+            <div className="value flex-grow-1 flex-shrink-1">
+              {getStatus(status, false)}
+            </div>
+          </div>
+          <div className="mobile-view ml-auto">
+            <Dropdown>
+              <Dropdown.Toggle size="sm" as={CustomToggle} />
+              <Dropdown.Menu>
+                <Dropdown.Item>Under Contruction</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
       </td>
       <td>
         <div className="d-flex">
@@ -103,11 +189,7 @@ export const VoucherItem: React.FC<IProps> = ({
         <div className="d-flex">
           <label className="flex-grow-1 flex-shrink-1">Status</label>
           <div className="value flex-grow-1 flex-shrink-1">
-            {status === 0 && <span>⏳ Waiting</span>}
-            {status === 1 && <span>💰 Sold</span>}
-            {status === 2 && <span>❌ Unpaid</span>}
-            {status === 3 && <span>😕 Missing</span>}
-            {(status > 3 || status < 0) && <span>👽 Unknown</span>}
+          {getStatus(status)}
           </div>
         </div>
       </td>
@@ -115,9 +197,7 @@ export const VoucherItem: React.FC<IProps> = ({
         <div className="d-flex">
           <label className="flex-grow-1 flex-shrink-1">Active</label>
           <div className="value flex-grow-1 flex-shrink-1">
-            {' '}
-            {active === 0 && <span>🔴</span>}
-            {active === 1 && <span>🟢</span>}
+           {getActiveStatus(active)}
           </div>
         </div>
       </td>

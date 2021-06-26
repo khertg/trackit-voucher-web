@@ -227,14 +227,15 @@ table.no-border th {
   border: none;
 }
 
-.custom-table thead {
+.custom-table thead tr:not(.mobile-view) {
   display: none;
 }
 
-.custom-table tbody tr {
+.custom-table tbody tr,
+.custom-table thead tr.mobile-view {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 7px;
   box-shadow: 0px 0px 9px 0px rgb(0, 0, 0, 0.1);
   border: 1.5px solid rgba(128, 128, 128, 0.18);
   border-radius: 5px;
@@ -242,9 +243,31 @@ table.no-border th {
   background-color: #fff;
 }
 
-.custom-table tbody tr td {
+.custom-table tbody tr td,
+.custom-table thead tr.mobile-view td {
   border: none;
-  margin: 5px 0;
+}
+
+.custom-table tbody tr td:not(:first-child) {
+  display: none;
+}
+
+.custom-table tbody tr td:first-child {
+  padding-right: 0;
+}
+
+.voucher-wrapper {
+  padding-left: 15px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.invi-btn {
+  border: none;
+  background-color: transparent;
 }
 
 .custom-table tbody tr td div {
@@ -271,6 +294,14 @@ table.no-border th {
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
+  .mobile-view {
+    display: none !important;
+  }
+
+  .custom-table thead tr:not(.mobile-view) {
+    display: table-row;
+  }
+
   .title-header {
     display: block;
   }
@@ -286,7 +317,7 @@ table.no-border th {
 
   .custom-table tbody tr {
     display: table-row;
-    background-color: inherit; 
+    background-color: inherit;
     margin-bottom: unset;
     box-shadow: unset;
     border: unset;
@@ -296,6 +327,10 @@ table.no-border th {
 
   .custom-table tbody tr td {
     margin: 5px 0;
+  }
+
+  .custom-table tbody tr td:not(:first-child) {
+    display: table-cell;
   }
 
   .custom-table tbody tr td div {
