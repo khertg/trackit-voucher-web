@@ -231,8 +231,9 @@ table.no-border th {
   display: none;
 }
 
+.custom-table thead tr.mobile-view,
 .custom-table tbody tr,
-.custom-table thead tr.mobile-view {
+.custom-table tfoot tr.mobile-view {
   display: flex;
   flex-direction: column;
   margin-bottom: 7px;
@@ -243,8 +244,9 @@ table.no-border th {
   background-color: #fff;
 }
 
+.custom-table thead tr.mobile-view td,
 .custom-table tbody tr td,
-.custom-table thead tr.mobile-view td {
+.custom-table tfoot tr.mobile-view td {
   border: none;
 }
 

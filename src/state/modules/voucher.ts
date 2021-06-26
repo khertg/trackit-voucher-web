@@ -21,6 +21,7 @@ export interface LocalVoucherState {
   toggleFilterForm: boolean;
   filter: IVoucherFilter;
   totalPage: number;
+  totalItems: number;
   rowPerPage: number;
   currentPage: number;
 }
@@ -98,6 +99,7 @@ const initialState = {
     page: 0,
   },
   totalPage: 0,
+  totalItems: 0,
   rowPerPage: rowPerPage(),
   currentPage: 0,
 } as LocalVoucherState;
@@ -114,6 +116,7 @@ const voucherSlice = createSlice({
     pagedVoucherFulfilled: (state, action: PayloadAction<IPagedVoucher>) => {
       state.data = action.payload.data;
       state.totalPage = action.payload.totalPages;
+      state.totalItems = action.payload.totalItems;
       state.filter.page = action.payload.currentPage;
       state.currentPage = action.payload.currentPage;
       state.selected = [];
@@ -179,6 +182,9 @@ export const voucherPageFilterSelector = (state: RootState) =>
 
 export const voucherTotalPageSelector = (state: RootState) =>
   state.entities.voucher.totalPage;
+
+export const voucherTotalItemsSelector = (state: RootState) =>
+  state.entities.voucher.totalItems;
 
 export const voucherRowCountPerPageSelector = (state: RootState) =>
   state.entities.voucher.rowPerPage;

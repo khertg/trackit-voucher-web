@@ -37,6 +37,7 @@
   "scripts": {
     "start": "env-cmd -f ./config/dev.env react-scripts start",
     "dev": "env-cmd -f ./config/dev.env react-scripts start",
+    "prod": "env-cmd -f ./config/prod.env react-scripts start",
     "build": "env-cmd -f ./config/prod.env react-scripts build",
     "deploy": "env-cmd -f ./config/deploy.env node src/deploy.js",
     "build:deploy": "env-cmd -f ./config/prod.env react-scripts build && env-cmd -f ./config/deploy.env node src/deploy.js",

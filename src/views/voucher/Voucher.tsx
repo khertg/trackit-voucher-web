@@ -20,6 +20,7 @@ import {
   updateFilterAction,
   voucherCurrenPageSelector,
   voucherPageFilterSelector,
+  voucherTotalItemsSelector,
 } from '../../state/modules/voucher';
 import { useForm } from 'react-hook-form';
 import {
@@ -27,6 +28,8 @@ import {
   showGlobalLoading,
 } from '../../state/modules/loading';
 import { Row, Col, Button, Form } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 export const Voucher: React.FC = () => {
   //Global State
@@ -35,6 +38,7 @@ export const Voucher: React.FC = () => {
   const showFilter = useSelector(voucherToggleFilterSelector);
   const voucherFilter = useSelector(voucherFilterSelector);
   const totalPage = useSelector(voucherTotalPageSelector);
+  const totalVoucher = useSelector(voucherTotalItemsSelector);
   const rowCountPerPage = useSelector(voucherRowCountPerPageSelector);
   const filterPage = useSelector(voucherPageFilterSelector);
   const currentPage = useSelector(voucherCurrenPageSelector);
@@ -44,7 +48,7 @@ export const Voucher: React.FC = () => {
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [showAllVoucherCode, setShowAllVoucherCode] = useState<boolean>(false);
 
-  const { register } = useForm({
+  const { register, getValues } = useForm({
     defaultValues: { voucher_per_page: rowCountPerPage },
   });
 
@@ -117,6 +121,16 @@ export const Voucher: React.FC = () => {
         ...voucherFilter,
         page: page,
       })
+    );
+  };
+
+  const showItemCounter = () => {
+    const endCount = (currentPage + 1) * getValues().voucher_per_page;
+    const startCount = endCount - (getValues().voucher_per_page - 1);
+    return (
+      <div>
+        Showing {startCount}-{endCount} results of {totalVoucher}
+      </div>
     );
   };
 
@@ -244,9 +258,7 @@ export const Voucher: React.FC = () => {
                         </Button>
                       </div>
                       &nbsp;
-                      <div>
-                        Voucher List
-                      </div>
+                      <div>Voucher List</div>
                     </div>
                   </td>
                 </tr>
@@ -275,6 +287,31 @@ export const Voucher: React.FC = () => {
                   </tr>
                 )}
               </tbody>
+              <tfoot>
+                <tr className="mobile-view">
+                  <td>
+                    <div className="d-flex align-items-center">
+                      {showItemCounter()}
+                      <div className="ml-auto">
+                        <ReactPaginate
+                          previousLabel={<FontAwesomeIcon icon={faAngleLeft} />}
+                          nextLabel={<FontAwesomeIcon icon={faAngleRight} />}
+                          breakLabel={'...'}
+                          breakClassName={'break-me'}
+                          pageCount={totalPage}
+                          marginPagesDisplayed={1}
+                          pageRangeDisplayed={1}
+                          onPageChange={handlePageClick}
+                          initialPage={filterPage}
+                          forcePage={currentPage}
+                          containerClassName={'pagination'}
+                          activeClassName={'active'}
+                        />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </Col>
