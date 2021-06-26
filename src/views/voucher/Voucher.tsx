@@ -21,6 +21,7 @@ import {
   voucherCurrenPageSelector,
   voucherPageFilterSelector,
   voucherTotalItemsSelector,
+  voucherToggleMobileListHeaderSelector,
 } from '../../state/modules/voucher';
 import { useForm } from 'react-hook-form';
 import {
@@ -36,6 +37,7 @@ export const Voucher: React.FC = () => {
   const voucherList = useSelector(voucherSelector);
   const selectVoucher = useSelector(selectedVoucherSelector);
   const showFilter = useSelector(voucherToggleFilterSelector);
+  const showMobileHeader = useSelector(voucherToggleMobileListHeaderSelector);
   const voucherFilter = useSelector(voucherFilterSelector);
   const totalPage = useSelector(voucherTotalPageSelector);
   const totalVoucher = useSelector(voucherTotalItemsSelector);
@@ -230,38 +232,40 @@ export const Voucher: React.FC = () => {
                   <td>Updated At</td>
                   <td>Options</td>
                 </tr>
-                <tr className="mobile-view">
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <div>
-                        <input
-                          type="checkbox"
-                          onChange={(e) => {
-                            handleSelectAll(e.target.checked);
-                          }}
-                          checked={selectAll}
-                        />
+                {showMobileHeader && (
+                  <tr className="mobile-view">
+                    <td>
+                      <div className="d-flex align-items-center">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={(e) => {
+                              handleSelectAll(e.target.checked);
+                            }}
+                            checked={selectAll}
+                          />
+                        </div>
+                        <div style={{ paddingLeft: '15px' }}>
+                          <Button
+                            variant="light"
+                            size="sm"
+                            onClick={() =>
+                              setShowAllVoucherCode(!showAllVoucherCode)
+                            }
+                          >
+                            {showAllVoucherCode ? (
+                              <span>🙉</span>
+                            ) : (
+                              <span>🙈</span>
+                            )}
+                          </Button>
+                        </div>
+                        &nbsp;
+                        <div>Voucher List</div>
                       </div>
-                      <div style={{ paddingLeft: '15px' }}>
-                        <Button
-                          variant="light"
-                          size="sm"
-                          onClick={() =>
-                            setShowAllVoucherCode(!showAllVoucherCode)
-                          }
-                        >
-                          {showAllVoucherCode ? (
-                            <span>🙉</span>
-                          ) : (
-                            <span>🙈</span>
-                          )}
-                        </Button>
-                      </div>
-                      &nbsp;
-                      <div>Voucher List</div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                )}
               </thead>
               <tbody>
                 {voucherList.map((voucher: IVoucher, index) => (

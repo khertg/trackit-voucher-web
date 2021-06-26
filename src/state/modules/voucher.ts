@@ -19,6 +19,7 @@ export interface LocalVoucherState {
   data: IVoucher[];
   selected: ISelectedVoucher[];
   toggleFilterForm: boolean;
+  toggleMobileListHeader: boolean;
   filter: IVoucherFilter;
   totalPage: number;
   totalItems: number;
@@ -81,6 +82,10 @@ export const toggleFilterAction = () => ({
   type: toggleFilter.type,
 });
 
+export const toggleMobileListHeaderAction = () => ({
+  type: toggleMobileHeader.type,
+});
+
 export const setRowCountPerPageAction = (rowCount: number) => ({
   type: setRowCountPerPage.type,
   payload: rowCount,
@@ -92,6 +97,7 @@ const initialState = {
   data: [],
   selected: [],
   toggleFilterForm: false,
+  toggleMobileListHeader: false,
   filter: {
     sold: '',
     sort_by: 'id:desc',
@@ -133,6 +139,9 @@ const voucherSlice = createSlice({
     toggleFilter: (state) => {
       state.toggleFilterForm = !state.toggleFilterForm;
     },
+    toggleMobileHeader: (state) => {
+      state.toggleMobileListHeader = !state.toggleMobileListHeader;
+    },
     setRowCountPerPage: (state, action: PayloadAction<number>) => {
       state.rowPerPage = action.payload;
     },
@@ -152,6 +161,7 @@ const voucherSlice = createSlice({
 const {
   setSelectedVoucher,
   toggleFilter,
+  toggleMobileHeader,
   setVoucherFilter,
   setRowCountPerPage,
   pagedVoucherPending,
@@ -176,6 +186,9 @@ export const voucherCurrenPageSelector = (state: RootState) =>
 
 export const voucherToggleFilterSelector = (state: RootState) =>
   state.entities.voucher.toggleFilterForm;
+
+export const voucherToggleMobileListHeaderSelector = (state: RootState) =>
+  state.entities.voucher.toggleMobileListHeader;
 
 export const voucherPageFilterSelector = (state: RootState) =>
   state.entities.voucher.filter.page;

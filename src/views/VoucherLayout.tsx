@@ -14,6 +14,7 @@ import {
   fetchVoucherAction,
   selectedVoucherSelector,
   toggleFilterAction,
+  toggleMobileListHeaderAction,
   voucherFilterSelector,
 } from '../state/modules/voucher';
 import { NotFound } from './NotFound';
@@ -88,7 +89,10 @@ export const VoucherLayout: React.FC = () => {
 
   return (
     <div style={{ backgroundColor: '#f4f4f4' }}>
-      <div className="general-header" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+      <div
+        className="general-header"
+        style={{ paddingTop: '10px', paddingBottom: '10px' }}
+      >
         <div className="title-header">
           <h2>Voucher</h2>
         </div>
@@ -127,6 +131,19 @@ export const VoucherLayout: React.FC = () => {
                 Import CSV
               </Button>
             </NavLink>
+          </div>
+          <div className="mobile-view" style={{ marginLeft: '4px' }}>
+            <Button
+              variant="secondary"
+              size="sm"
+              style={{ whiteSpace: 'nowrap' }}
+              onClick={() => {
+                dispatch(toggleMobileListHeaderAction());
+              }}
+              disabled={path !== history.location.pathname}
+            >
+              Toggle Header
+            </Button>
           </div>
           &nbsp;
           <div>
