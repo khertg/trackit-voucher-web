@@ -1,0 +1,179 @@
+table.load-table,
+table.load-table td,
+table.load-table th {
+  border: 1px solid black;
+}
+
+table.load-table td {
+  padding: 5px;
+}
+
+.content-table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table th,
+.content-table td {
+  padding: 7px 10px;
+}
+
+.content-table thead,
+.content-table tfoot {
+  height: 50px;
+}
+
+.content-table thead tr {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  font-weight: bold;
+}
+
+.content-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  background-color: #ffffff;
+}
+
+.content-table tfoot tr {
+  background-color: #ffffff;
+}
+
+.voucher-table.content-table thead tr:first-child {
+  font-weight: unset;
+}
+
+/* Checkbox */
+.voucher-table.content-table thead tr.list-header td:first-child {
+  max-width: 41px;
+}
+
+/* ID */
+.voucher-table.content-table thead tr.list-header td:nth-child(2) {
+  width: 30%;
+}
+
+/* Voucher Code */
+.voucher-table.content-table thead tr.list-header td:nth-child(3) {
+  width: 50%;
+}
+
+/* Status */
+.voucher-table.content-table thead tr.list-header td:nth-child(4) {
+  width: 20%;
+}
+
+/* Active Status */
+.voucher-table.content-table thead tr.list-header td:nth-child(5) {
+  width: 20%;
+}
+
+/* Sold To */
+.voucher-table.content-table thead tr.list-header td:nth-child(6) {
+  width: 5%;
+}
+
+/* Created At */
+.voucher-table.content-table thead tr.list-header td:nth-child(7) {
+  width: 5%;
+}
+
+/* Updated At */
+.voucher-table.content-table thead tr.list-header td:nth-child(8) {
+  width: 5%;
+}
+
+/* Dropdown */
+.voucher-table.content-table thead tr.list-header td:last-child {
+  width: 5%;
+}
+
+.voucher-table.content-table thead tr.list-header td:nth-child(2),
+.voucher-table.content-table thead tr.list-header td:nth-child(6),
+.voucher-table.content-table thead tr.list-header td:nth-child(7),
+.voucher-table.content-table thead tr.list-header td:nth-child(8) {
+  display: none;
+}
+
+.voucher-table.content-table tbody tr td:nth-child(2),
+.voucher-table.content-table tbody tr td:nth-child(6),
+.voucher-table.content-table tbody tr td:nth-child(7),
+.voucher-table.content-table tbody tr td:nth-child(8) {
+  display: none;
+}
+
+.voucher-table.content-table thead tr.list-header td:first-child,
+.voucher-table.content-table tbody tr td:first-child {
+  min-height: 41px;
+  width: 41px;
+  text-align: center;
+}
+
+.voucher-table.content-table thead tr.list-header td:first-child input,
+.voucher-table.content-table tbody tr td:first-child input {
+  vertical-align: middle;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .voucher-table.content-table thead tr.list-header td:nth-child(2),
+  .voucher-table.content-table thead tr.list-header td:nth-child(6),
+  .voucher-table.content-table thead tr.list-header td:nth-child(7),
+  .voucher-table.content-table thead tr.list-header td:nth-child(8) {
+    display: table-cell;
+  }
+
+  .voucher-table.content-table tbody tr td:nth-child(2),
+  .voucher-table.content-table tbody tr td:nth-child(6),
+  .voucher-table.content-table tbody tr td:nth-child(7),
+  .voucher-table.content-table tbody tr td:nth-child(8) {
+    display: table-cell;
+  }
+
+  /* ID */
+  .voucher-table.content-table thead tr.list-header td:nth-child(2) {
+    width: 5%;
+  }
+
+  /* Voucher Code */
+  .voucher-table.content-table thead tr.list-header td:nth-child(3) {
+    width: 25%;
+  }
+
+  /* Status */
+  .voucher-table.content-table thead tr.list-header td:nth-child(4) {
+    width: 5%;
+  }
+
+  /* Active Status */
+  .voucher-table.content-table thead tr.list-header td:nth-child(5) {
+    width: 10%;
+  }
+
+  /* Sold To */
+  .voucher-table.content-table thead tr.list-header td:nth-child(6) {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  /* Created At */
+  .voucher-table.content-table thead tr.list-header td:nth-child(7) {
+    min-width: 92px;
+    width: 15%;
+  }
+
+  /* Updated At */
+  .voucher-table.content-table thead tr.list-header td:nth-child(8) {
+    min-width: 99px;
+    width: 15%;
+  }
+
+  /* Dropdown */
+  .voucher-table.content-table thead tr.list-header td:last-child {
+    width: 5%;
+  }
+}

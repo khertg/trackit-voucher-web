@@ -141,7 +141,7 @@ export const Load: React.FC = () => {
         </Fragment>
       )}
       <div className="table-responsive">
-        <table>
+        <table className="load-table">
           <thead>
             <tr className="no-border">
               <td colSpan={9}>

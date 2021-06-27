@@ -1,0 +1,9 @@
+.pagination.custom-pagination .page-link {
+  color: #212529;
+}
+
+.pagination.custom-pagination .page-item.active .page-link {
+  background-color: #8f9499;
+  border-color: #8f9499;
+  color: #ffffff;
+}

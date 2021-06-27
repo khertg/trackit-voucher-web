@@ -149,73 +149,58 @@ export const Voucher: React.FC = () => {
       )}
       <Row>
         <Col>
-          <div className="table-responsive">
-            <table className="custom-table">
-              <thead>
-                <tr className="no-border">
-                  <td colSpan={9}>
-                    <div className="paging-header">
-                      <div>
-                        <ReactPaginate
-                          previousLabel={'previous'}
-                          nextLabel={'next'}
-                          breakLabel={'...'}
-                          breakClassName={'break-me'}
-                          pageCount={totalPage}
-                          marginPagesDisplayed={2}
-                          pageRangeDisplayed={5}
-                          onPageChange={handlePageClick}
-                          initialPage={filterPage}
-                          forcePage={currentPage}
-                          containerClassName={'pagination'}
-                          activeClassName={'active'}
-                        />
-                      </div>
-                      <div>
-                        <div className="d-flex">
-                          <Form.Control
-                            as="select"
-                            id="voucher_per_page"
-                            className="form-control-sm"
-                            style={{ width: '59px' }}
-                            {...register('voucher_per_page')}
-                            onChange={(e) => {
-                              setSelectAll(false);
-                              const filter = { ...voucherFilter };
-                              filter.limit = parseInt(e.target.value);
-                              filter.page = 0;
-                              dispatch(updateRowCountPerPageAction(filter));
-                            }}
-                          >
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                          </Form.Control>
-                          &nbsp;
-                          <label
-                            style={{ width: '65px' }}
-                            htmlFor="voucher-per-page"
-                          >
-                            per page
-                          </label>
-                        </div>
-                      </div>
+          <table className="content-table voucher-table">
+            <thead>
+              <tr className="list-pagination-header">
+                <td colSpan={9}>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div>
+                      Page {currentPage + 1} of {totalPage}
                     </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      type="checkbox"
-                      onChange={(e) => {
-                        handleSelectAll(e.target.checked);
-                      }}
-                      checked={selectAll}
-                    />
-                  </td>
-                  <td>ID</td>
-                  <td>
+                    <div className="d-flex align-items-center">
+                      <label
+                        className="ml-auto"
+                        style={{ marginBottom: '0' }}
+                        htmlFor="voucher-per-page"
+                      >
+                        Limit&nbsp;&nbsp;
+                      </label>
+                      <Form.Control
+                        as="select"
+                        id="voucher_per_page"
+                        className="form-control form-control-sm"
+                        style={{ width: '59px' }}
+                        {...register('voucher_per_page')}
+                        onChange={(e) => {
+                          setSelectAll(false);
+                          const filter = { ...voucherFilter };
+                          filter.limit = parseInt(e.target.value);
+                          filter.page = 0;
+                          dispatch(updateRowCountPerPageAction(filter));
+                        }}
+                      >
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                      </Form.Control>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr className="list-header">
+                <td>
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      handleSelectAll(e.target.checked);
+                    }}
+                    checked={selectAll}
+                  />
+                </td>
+                <td>ID</td>
+                <td>
+                  <div className="d-flex align-items-center">
                     <Button
                       variant="light"
                       size="sm"
@@ -223,101 +208,74 @@ export const Voucher: React.FC = () => {
                     >
                       {showAllVoucherCode ? <span>🙉</span> : <span>🙈</span>}
                     </Button>
-                    &nbsp;Voucher Code
-                  </td>
-                  <td>Status</td>
-                  <td>Active</td>
-                  <td>Sold To</td>
-                  <td>Created At</td>
-                  <td>Updated At</td>
-                  <td>Options</td>
-                </tr>
-                {showMobileHeader && (
-                  <tr className="mobile-view">
-                    <td>
-                      <div className="d-flex align-items-center">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={(e) => {
-                              handleSelectAll(e.target.checked);
-                            }}
-                            checked={selectAll}
-                          />
-                        </div>
-                        <div style={{ paddingLeft: '15px' }}>
-                          <Button
-                            variant="light"
-                            size="sm"
-                            onClick={() =>
-                              setShowAllVoucherCode(!showAllVoucherCode)
-                            }
-                          >
-                            {showAllVoucherCode ? (
-                              <span>🙉</span>
-                            ) : (
-                              <span>🙈</span>
-                            )}
-                          </Button>
-                        </div>
-                        &nbsp;
-                        <div>Voucher List</div>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </thead>
-              <tbody>
-                {voucherList.map((voucher: IVoucher, index) => (
-                  <VoucherItem
-                    handleSelect={handleVoucherSelection}
-                    handleDelete={handleDelete}
-                    isSelected={selectAll}
-                    isShow={showAllVoucherCode}
-                    key={voucher.id}
-                    id={voucher.id}
-                    voucher_code={voucher.voucher_code}
-                    status={voucher.status}
-                    active={voucher.active}
-                    buyer={voucher.buyer}
-                    created_at={voucher.created_at}
-                    updated_at={voucher.updated_at}
-                  />
-                ))}
+                    <div className="w-100 text-center">Voucher</div>
+                  </div>
+                </td>
+                <td>Status</td>
+                <td className="text-center">Enabled</td>
+                <td>Sold To</td>
+                <td>Created At</td>
+                <td>Updated At</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {voucherList.map((voucher: IVoucher, index) => (
+                <VoucherItem
+                  handleSelect={handleVoucherSelection}
+                  handleDelete={handleDelete}
+                  isSelected={selectAll}
+                  isShow={showAllVoucherCode}
+                  key={voucher.id}
+                  id={voucher.id}
+                  voucher_code={voucher.voucher_code}
+                  status={voucher.status}
+                  active={voucher.active}
+                  buyer={voucher.buyer}
+                  created_at={voucher.created_at}
+                  updated_at={voucher.updated_at}
+                />
+              ))}
 
-                {voucherList.length < 1 && (
-                  <tr>
-                    <td colSpan={9}>No results!</td>
-                  </tr>
-                )}
-              </tbody>
-              <tfoot>
-                <tr className="mobile-view">
-                  <td>
-                    <div className="d-flex align-items-center">
-                      {showItemCounter()}
-                      <div className="ml-auto">
-                        <ReactPaginate
-                          previousLabel={<FontAwesomeIcon icon={faAngleLeft} />}
-                          nextLabel={<FontAwesomeIcon icon={faAngleRight} />}
-                          breakLabel={'...'}
-                          breakClassName={'break-me'}
-                          pageCount={totalPage}
-                          marginPagesDisplayed={1}
-                          pageRangeDisplayed={1}
-                          onPageChange={handlePageClick}
-                          initialPage={filterPage}
-                          forcePage={currentPage}
-                          containerClassName={'pagination'}
-                          activeClassName={'active'}
-                        />
-                      </div>
-                    </div>
-                  </td>
+              {voucherList.length < 1 && (
+                <tr>
+                  <td colSpan={9}>No results!</td>
                 </tr>
-              </tfoot>
-            </table>
-          </div>
+              )}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan={9}>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div>{showItemCounter()}</div>
+                    <div className="d-flex">
+                      <ReactPaginate
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        nextLinkClassName="page-link"
+                        previousLinkClassName="page-link"
+                        previousLabel={<FontAwesomeIcon icon={faAngleLeft} />}
+                        nextLabel={<FontAwesomeIcon icon={faAngleRight} />}
+                        breakLabel={'...'}
+                        breakClassName={'break-me'}
+                        breakLinkClassName="page-link"
+                        pageCount={totalPage}
+                        marginPagesDisplayed={1}
+                        pageRangeDisplayed={1}
+                        onPageChange={handlePageClick}
+                        initialPage={filterPage}
+                        forcePage={currentPage}
+                        containerClassName={
+                          'pagination custom-pagination pagination-sm ml-auto'
+                        }
+                        activeClassName={'active'}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </Col>
       </Row>
       <br />

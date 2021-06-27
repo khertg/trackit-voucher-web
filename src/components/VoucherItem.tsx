@@ -102,204 +102,129 @@ export const VoucherItem: React.FC<IProps> = ({
     }
   };
 
+  const handleEdit = (e: any) => {
+    history.push(`/voucher/edit/${id}`);
+  };
+
+  const handleEnable = (e: any) => {
+    window.scrollTo(0, 0);
+    dispatch(showGlobalLoading());
+    enableVoucher(id)
+      .then(() => {
+        dispatch(hideGlobalLoading());
+        dispatch(
+          fetchVoucherAction({
+            ...voucherFilter,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Error enabling the voucher');
+        dispatch(hideGlobalLoading());
+      });
+  };
+
+  const handleDisable = (e: any) => {
+    window.scrollTo(0, 0);
+    dispatch(showGlobalLoading());
+    disableVoucher(id)
+      .then(() => {
+        dispatch(hideGlobalLoading());
+        dispatch(
+          fetchVoucherAction({
+            ...voucherFilter,
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('Error disabling the voucher');
+        dispatch(hideGlobalLoading());
+      });
+  };
+
   return (
     <tr>
       <td>
-        <div className="checkbox-container">
-          <div>
-            <input
-              type="checkbox"
-              className="select-item"
-              onChange={(e) => {
-                setIsChecked(!isChecked);
-                handleSelect(id, voucher_code, e.target.checked);
-              }}
-              value={id}
-              checked={isChecked}
-            />
-          </div>
-          <div className="mobile-view voucher-wrapper">
-            <div className="voucher-container">
-              <Button
-                variant="light"
-                size="sm"
-                onClick={() => setShowVoucherCode(!showVoucherCode)}
-              >
-                {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
-              </Button>
-              &nbsp;
-              <Form.Control
-                size="sm"
-                type={showVoucherCode ? 'text' : 'password'}
-                defaultValue={voucher_code}
-              />
-            </div>
-          </div>
-          &nbsp;&nbsp;
-          <div className="mobile-view d-flex">
-            <div className="value flex-grow-1 flex-shrink-1">
-              {getActiveStatus(active)}
-            </div>
-          </div>
-          &nbsp;&nbsp;
-          <div className="mobile-view d-flex">
-            <div className="value flex-grow-1 flex-shrink-1">
-              {getStatus(status, false)}
-            </div>
-          </div>
-          <div className="mobile-view ml-auto">
-            <Dropdown>
-              <Dropdown.Toggle size="sm" as={CustomToggle} />
-              <Dropdown.Menu>
-                <Dropdown.Item>Under Contruction</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
+        <input
+          type="checkbox"
+          className="select-item"
+          onChange={(e) => {
+            setIsChecked(!isChecked);
+            handleSelect(id, voucher_code, e.target.checked);
+          }}
+          value={id}
+          checked={isChecked}
+        />
       </td>
       <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">ID</label>
-          <div className="value flex-grow-1 flex-shrink-1">{id}</div>
-        </div>
+        <div className="value flex-grow-1 flex-shrink-1">{id}</div>
       </td>
       <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Voucher</label>
-          <div className="value flex-grow-1 flex-shrink-1">
-            <div className="voucher-container">
-              <Button
-                variant="light"
-                size="sm"
-                onClick={() => setShowVoucherCode(!showVoucherCode)}
-              >
-                {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
-              </Button>
-              &nbsp;
-              <Form.Control
-                size="sm"
-                type={showVoucherCode ? 'text' : 'password'}
-                defaultValue={voucher_code}
-              />
-            </div>
-          </div>
+        <div className="voucher-container">
+          <Button
+            variant="light"
+            size="sm"
+            onClick={() => setShowVoucherCode(!showVoucherCode)}
+          >
+            {showVoucherCode ? <span>🙉</span> : <span>🙈</span>}
+          </Button>
+          &nbsp;
+          <Form.Control
+            size="sm"
+            type={showVoucherCode ? 'text' : 'password'}
+            defaultValue={voucher_code}
+          />
         </div>
       </td>
-      <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Status</label>
-          <div className="value flex-grow-1 flex-shrink-1">
+      <td style={{ whiteSpace: 'nowrap' }}>
+        <div className="value flex-grow-1 flex-shrink-1">
           {getStatus(status)}
-          </div>
         </div>
       </td>
       <td style={{ textAlign: 'center' }}>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Active</label>
-          <div className="value flex-grow-1 flex-shrink-1">
-           {getActiveStatus(active)}
-          </div>
+        <div className="value flex-grow-1 flex-shrink-1">
+          {getActiveStatus(active)}
         </div>
       </td>
       <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Buyer</label>
-          <div className="value flex-grow-1 flex-shrink-1">
-            {buyer ? buyer : '-'}
-          </div>
+        <div className="value flex-grow-1 flex-shrink-1">
+          {buyer ? buyer : '-'}
         </div>
       </td>
 
       <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Created</label>
-          <div className="value flex-grow-1 flex-shrink-1">
-            {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
-          </div>
+        <div className="value flex-grow-1 flex-shrink-1">
+          {Moment(created_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
         </div>
       </td>
       <td>
-        <div className="d-flex">
-          <label className="flex-grow-1 flex-shrink-1">Updated</label>
-          <div className="value flex-grow-1 flex-shrink-1">
-            {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
-          </div>
+        <div className="value flex-grow-1 flex-shrink-1">
+          {Moment(updated_at).tz('Asia/Manila').format('MMM-DD-YYYY hh:mm A')}
         </div>
       </td>
       <td>
-        <Button
-          style={{ minWidth: '60px' }}
-          variant="info"
-          size="sm"
-          onClick={(e) => {
-            history.push(`/voucher/edit/${id}`);
-          }}
-        >
-          Edit
-        </Button>
-        &nbsp;
-        <Button
-          variant="success"
-          size="sm"
-          onClick={() => {
-            window.scrollTo(0, 0);
-            dispatch(showGlobalLoading());
-            enableVoucher(id)
-              .then(() => {
-                dispatch(hideGlobalLoading());
-                dispatch(
-                  fetchVoucherAction({
-                    ...voucherFilter,
-                  })
-                );
-              })
-              .catch((err) => {
-                console.log(err);
-                alert('Error enabling the voucher');
-                dispatch(hideGlobalLoading());
-              });
-          }}
-          disabled={active === 1}
-        >
-          Enable
-        </Button>
-        &nbsp;
-        <Button
-          variant="warning"
-          size="sm"
-          onClick={() => {
-            window.scrollTo(0, 0);
-            dispatch(showGlobalLoading());
-            disableVoucher(id)
-              .then(() => {
-                dispatch(hideGlobalLoading());
-                dispatch(
-                  fetchVoucherAction({
-                    ...voucherFilter,
-                  })
-                );
-              })
-              .catch((err) => {
-                console.log(err);
-                alert('Error disabling the voucher');
-                dispatch(hideGlobalLoading());
-              });
-          }}
-          disabled={active === 0}
-        >
-          Disable
-        </Button>
-        &nbsp;
-        <Button
-          variant="danger"
-          size="sm"
-          onClick={() => {
-            window.scrollTo(0, 0);
-            handleDelete(id);
-          }}
-        >
-          Delete
-        </Button>
+        <Dropdown>
+          <Dropdown.Toggle size="sm" as={CustomToggle} />
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={handleEdit}>Edit</Dropdown.Item>
+            <Dropdown.Item onClick={handleEnable} disabled={active === 1}>
+              Enable
+            </Dropdown.Item>
+            <Dropdown.Item onClick={handleDisable} disabled={active === 0}>
+              Disable
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => {
+                window.scrollTo(0, 0);
+                handleDelete(id);
+              }}
+            >
+              Delete
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </td>
     </tr>
   );
