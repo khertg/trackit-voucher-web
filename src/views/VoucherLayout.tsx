@@ -132,19 +132,6 @@ export const VoucherLayout: React.FC = () => {
               </Button>
             </NavLink>
           </div>
-          <div className="mobile-view" style={{ marginLeft: '4px' }}>
-            <Button
-              variant="secondary"
-              size="sm"
-              style={{ whiteSpace: 'nowrap' }}
-              onClick={() => {
-                dispatch(toggleMobileListHeaderAction());
-              }}
-              disabled={path !== history.location.pathname}
-            >
-              Toggle Header
-            </Button>
-          </div>
           &nbsp;
           <div>
             <Button
