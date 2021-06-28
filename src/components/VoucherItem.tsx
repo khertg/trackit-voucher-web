@@ -175,6 +175,7 @@ export const VoucherItem: React.FC<IProps> = ({
             size="sm"
             type={showVoucherCode ? 'text' : 'password'}
             defaultValue={voucher_code}
+            disabled={true}
           />
         </div>
       </td>
