@@ -9,7 +9,7 @@ table.load-table td {
 }
 
 .content-table {
-  table-layout: fixed;
+  width: 100%;
   border-collapse: collapse;
   font-size: 0.9em;
   border-radius: 5px;
@@ -49,7 +49,7 @@ table.load-table td {
 
 /* Checkbox */
 .voucher-table.content-table thead tr.list-header td:first-child {
-  max-width: 41px;
+  width: 41px;
 }
 
 /* ID */
@@ -113,6 +113,11 @@ table.load-table td {
   text-align: center;
 }
 
+.voucher-table.content-table thead tr.list-header td:nth-child(2),
+.voucher-table.content-table tbody tr td:nth-child(2) {
+  text-align: center;
+}
+
 .voucher-table.content-table thead tr.list-header td:first-child input,
 .voucher-table.content-table tbody tr td:first-child input {
   vertical-align: middle;
@@ -134,19 +139,24 @@ table.load-table td {
     display: table-cell;
   }
 
+  /* Checkbox */
+  .voucher-table.content-table thead tr.list-header td:first-child {
+    max-width: 41px;
+  }
+
   /* ID */
   .voucher-table.content-table thead tr.list-header td:nth-child(2) {
-    width: 5%;
+    width: 8%;
   }
 
   /* Voucher Code */
   .voucher-table.content-table thead tr.list-header td:nth-child(3) {
-    width: 25%;
+    width: 22%;
   }
 
   /* Status */
   .voucher-table.content-table thead tr.list-header td:nth-child(4) {
-    width: 5%;
+    width: 8%;
   }
 
   /* Active Status */
@@ -157,7 +167,7 @@ table.load-table td {
   /* Sold To */
   .voucher-table.content-table thead tr.list-header td:nth-child(6) {
     min-width: 70px;
-    width: 15%;
+    width: 12%;
   }
 
   /* Created At */
