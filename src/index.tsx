@@ -5,6 +5,7 @@ import './index.css';
 import './table.css';
 import './pagination.css';
 import './voucher.css';
+import './loading.css';
 import App from './App';
 import { Router } from 'react-router-dom';
 import history from './history';

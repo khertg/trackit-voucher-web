@@ -25,6 +25,7 @@ export interface LocalVoucherState {
   totalItems: number;
   rowPerPage: number;
   currentPage: number;
+  loading: boolean;
 }
 
 // Action Creators
@@ -33,10 +34,8 @@ export const fetchVoucherAction = (filter?: IVoucherFilter): ApiAction => ({
   type: apiCallBegan.type,
   payload: {
     url: `/api/v1/voucher?${buildQueryParams(filter)}`,
-    onStart: showGlobalLoading.type,
     onProcess: pagedVoucherPending.type,
     onSuccess: pagedVoucherFulfilled.type,
-    onEnd: hideGlobalLoading.type,
   },
 });
 
@@ -108,6 +107,7 @@ const initialState = {
   totalItems: 0,
   rowPerPage: rowPerPage(),
   currentPage: 0,
+  loading: false,
 } as LocalVoucherState;
 
 // Voucher Slice
@@ -117,6 +117,7 @@ const voucherSlice = createSlice({
   initialState,
   reducers: {
     pagedVoucherPending: (state) => {
+      state.loading = true;
       state.data = [];
     },
     pagedVoucherFulfilled: (state, action: PayloadAction<IPagedVoucher>) => {
@@ -126,6 +127,7 @@ const voucherSlice = createSlice({
       state.filter.page = action.payload.currentPage;
       state.currentPage = action.payload.currentPage;
       state.selected = [];
+      state.loading = false;
     },
     setSelectedVoucher: (state, action: PayloadAction<ISelectedVoucher[]>) => {
       state.selected = action.payload;
@@ -174,6 +176,9 @@ const {
 // Selectors
 export const voucherSelector = (state: RootState) =>
   state.entities.voucher.data;
+
+export const voucherLoadingSelector = (state: RootState) =>
+  state.entities.voucher.loading;
 
 export const selectedVoucherSelector = (state: RootState) =>
   state.entities.voucher.selected;

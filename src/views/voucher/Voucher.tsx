@@ -22,6 +22,7 @@ import {
   voucherPageFilterSelector,
   voucherTotalItemsSelector,
   voucherToggleMobileListHeaderSelector,
+  voucherLoadingSelector,
 } from '../../state/modules/voucher';
 import { useForm } from 'react-hook-form';
 import {
@@ -35,6 +36,7 @@ import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 export const Voucher: React.FC = () => {
   //Global State
   const voucherList = useSelector(voucherSelector);
+  const voucherLoading = useSelector(voucherLoadingSelector);
   const selectVoucher = useSelector(selectedVoucherSelector);
   const showFilter = useSelector(voucherToggleFilterSelector);
   const showMobileHeader = useSelector(voucherToggleMobileListHeaderSelector);
@@ -229,27 +231,39 @@ export const Voucher: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {voucherList.map((voucher: IVoucher, index) => (
-                    <VoucherItem
-                      handleSelect={handleVoucherSelection}
-                      handleDelete={handleDelete}
-                      isSelected={selectAll}
-                      isShow={showAllVoucherCode}
-                      key={voucher.id}
-                      id={voucher.id}
-                      voucher_code={voucher.voucher_code}
-                      status={voucher.status}
-                      active={voucher.active}
-                      buyer={voucher.buyer}
-                      created_at={voucher.created_at}
-                      updated_at={voucher.updated_at}
-                    />
-                  ))}
-
-                  {voucherList.length < 1 && (
+                  {voucherLoading ? (
                     <tr>
-                      <td colSpan={9}>No results!</td>
+                      <td colSpan={9}>
+                        <div className="animated-background-top"></div>
+                        <div className="animated-background-middle"></div>
+                        <div className="animated-background-bottom"></div>
+                      </td>
                     </tr>
+                  ) : (
+                    <Fragment>
+                      {voucherList.map((voucher: IVoucher, index) => (
+                        <VoucherItem
+                          handleSelect={handleVoucherSelection}
+                          handleDelete={handleDelete}
+                          isSelected={selectAll}
+                          isShow={showAllVoucherCode}
+                          key={voucher.id}
+                          id={voucher.id}
+                          voucher_code={voucher.voucher_code}
+                          status={voucher.status}
+                          active={voucher.active}
+                          buyer={voucher.buyer}
+                          created_at={voucher.created_at}
+                          updated_at={voucher.updated_at}
+                        />
+                      ))}
+
+                      {voucherList.length < 1 && (
+                        <tr>
+                          <td colSpan={9}>No results!</td>
+                        </tr>
+                      )}
+                    </Fragment>
                   )}
                 </tbody>
                 <tfoot>
