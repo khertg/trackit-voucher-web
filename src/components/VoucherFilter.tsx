@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { Form } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { IVoucherFilter } from '../models/voucher';
 
@@ -15,83 +16,111 @@ export const VoucherFilter: React.FC<IProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     mode: 'onChange',
     defaultValues: preloadedValues,
   });
 
+  const refSubmitButtom = useRef<HTMLButtonElement>(null);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <table className="no-border">
-        <tbody>
-          <tr>
-            <td>Code:</td>
-            <td style={{textAlign: 'left'}}>
-              <input type="text" {...register('voucher_code')} />
-              &nbsp;
-              <small className="text-danger">
-                {errors.voucher_code && errors.voucher_code.message}
-              </small>
-            </td>
-          </tr>
-          <tr>
-            <td>Buyer:</td>
-            <td style={{textAlign: 'left'}}>
-              <input type="text" {...register('buyer')} />
-            </td>
-          </tr>
-          <tr>
-            <td>Status:</td>
-            <td style={{textAlign: 'left'}}>
-              <input {...register('status')} type="radio" value="" id="all" />
-              <label htmlFor="all">All</label>&nbsp;
-              <input
-                {...register('status')}
-                type="radio"
-                value="1"
-                id="sold"
-              />
-              <label htmlFor="sold">Sold</label>&nbsp;
-              <input
-                {...register('status')}
-                type="radio"
-                value="0"
-                id="not_sold"
-              />
-              <label htmlFor="not_sold">Not Sold</label>&nbsp;
-              <input
-                {...register('status')}
-                type="radio"
-                value="2"
-                id="unpaid"
-              />
-              <label htmlFor="unpaid">Unpaid</label>&nbsp;
-              <input
-                {...register('status')}
-                type="radio"
-                value="3"
-                id="missing"
-              />
-              <label htmlFor="missing">Missing</label>&nbsp;
-            </td>
-          </tr>
-          <tr>
-            <td>Sort:</td>
-            <td style={{textAlign: 'left'}}>
-              <select {...register('sort_by', { required: true })}>
-                <option value="id:desc">Desc</option>
-                <option value="id:asc">Asc</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td style={{textAlign: 'left'}}>
-              <button type="submit">Apply Filter</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <Form.Group>
+        <Form.Label>Voucher Code</Form.Label>
+        <Form.Control
+          type="text"
+          size="sm"
+          {...register('voucher_code')}
+          className="form-control form-control-sm"
+        />
+        <small className="text-danger">
+          {errors.voucher_code && errors.voucher_code.message}
+        </small>
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Buyer</Form.Label>
+        <Form.Control
+          type="text"
+          size="sm"
+          {...register('buyer')}
+          className="form-control form-control-sm"
+        />
+      </Form.Group>
+      <fieldset>
+        <Form.Group>
+          <Form.Label>Status</Form.Label>
+          <Form.Check
+            type="radio"
+            label="All"
+            {...register('status')}
+            value=""
+            id="all"
+          />
+          <Form.Check
+            type="radio"
+            label="Sold"
+            {...register('status')}
+            value="1"
+            id="sold"
+          />
+          <Form.Check
+            type="radio"
+            label="Not Sold"
+            {...register('status')}
+            value="0"
+            id="not_sold"
+          />
+          <Form.Check
+            type="radio"
+            label="Unpaid"
+            {...register('status')}
+            value="2"
+            id="unpaid"
+          />
+          <Form.Check
+            type="radio"
+            label="Missing"
+            {...register('status')}
+            value="3"
+            id="missing"
+          />
+        </Form.Group>
+      </fieldset>
+      <Form.Group>
+        <Form.Label>Sort</Form.Label>
+        <select
+          {...register('sort_by', { required: true })}
+          className="form-control form-control-sm"
+        >
+          <option value="id:desc">Desc</option>
+          <option value="id:asc">Asc</option>
+        </select>
+      </Form.Group>
+      <button
+        ref={refSubmitButtom}
+        type="submit"
+        className="btn btn-secondary btn-sm mt-2"
+      >
+        Apply Filter
+      </button>
+      &nbsp;
+      <button
+        type="button"
+        onClick={() => {
+          const filter = {
+            status: '',
+            sort_by: 'id:desc',
+            voucher_code: '',
+            buyer: '',
+          };
+          reset(filter);
+          refSubmitButtom?.current?.click();
+        }}
+        className="btn btn-light btn-sm mt-2"
+      >
+        Clear Filter
+      </button>
     </form>
   );
 };
